@@ -2,14 +2,14 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use app\components\grid\ActionColumn;
+use yii\grid\ActionColumn;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Users';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Пользователи';
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Создать', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'email',
             'login',
 
-            ['class' => ActionColumn::className()],
+            [
+                'class' => ActionColumn::className(),
+                'template' => '{update}{delete}'
+            ],
         ],
     ]); ?>
 

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: den
+ * Date: 12.03.16
+ * Time: 19:00
+ */
+
+namespace app\controllers\generator;
+
+use app\components\api\shop\gateways\BrandGateway;
+use app\controllers\BaseController;
+use app\models\forms\GeneralSettingsForm;
+use app\models\Shop;
+use yii\web\BadRequestHttpException;
+
+class GeneralController extends BaseController
+{
+    public function actionIndex($shopId)
+    {
+        /** @var Shop $shop */
+        $shop = Shop::findOne($shopId);
+        if (!$shop) {
+            throw new BadRequestHttpException('Shop not found.');
+        }
+
+        $brandsApiGateway = new BrandGateway($shop->brand_api_url, $shop->api_secret_key);
+        $form = new GeneralSettingsForm();
+
+        return $this->render('index', [
+            'brands' => $brandsApiGateway->getBrandsList(),
+            'model' => $form
+        ]);
+    }
+}
