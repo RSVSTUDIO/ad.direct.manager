@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\components\api\shop\gateways\ProductGateway;
+use app\components\api\shop\gateways\ProductsGateway;
 use app\components\api\shop\query\ProductQuery;
 use app\models\Shop;
 use Yii;

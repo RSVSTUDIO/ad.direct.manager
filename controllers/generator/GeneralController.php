@@ -8,7 +8,7 @@
 
 namespace app\controllers\generator;
 
-use app\components\api\shop\gateways\BrandGateway;
+use app\components\api\shop\gateways\BrandsGateway;
 use app\controllers\BaseController;
 use app\models\forms\GeneralSettingsForm;
 use app\models\Shop;
@@ -24,7 +24,7 @@ class GeneralController extends BaseController
             throw new BadRequestHttpException('Shop not found.');
         }
 
-        $brandsApiGateway = new BrandGateway($shop->brand_api_url, $shop->api_secret_key);
+        $brandsApiGateway = new BrandsGateway($shop->brand_api_url, $shop->api_secret_key);
         $form = new GeneralSettingsForm();
 
         return $this->render('index', [

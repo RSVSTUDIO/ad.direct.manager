@@ -13,6 +13,7 @@ use Yii;
  * @property string $title
  * @property string $seo_title
  * @property string $keywords
+ * @property float $price
  *
  * @property Shop $shop
  */
@@ -32,11 +33,12 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_id', 'product_id', 'title', 'seo_title', 'keywords'], 'required'],
+            [['shop_id', 'product_id'], 'required'],
             [['shop_id', 'product_id'], 'integer'],
             [['keywords'], 'string'],
-            [['title'], 'string', 'max' => 500],
-            [['seo_title'], 'string', 'max' => 33]
+            [['title'], 'string'],
+            [['seo_title'], 'string'],
+            ['price', 'number']
         ];
     }
 
@@ -46,12 +48,13 @@ class Product extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'shop_id' => 'Shop ID',
-            'product_id' => 'Product ID',
-            'title' => 'Title',
-            'seo_title' => 'Seo Title',
-            'keywords' => 'Keywords',
+            'id' => 'ИД',
+            'shop_id' => 'ИД магазина',
+            'product_id' => 'Товар',
+            'title' => 'Название',
+            'seo_title' => 'Название директа',
+            'keywords' => 'Ключевые слова',
+            'price' => 'Цена'
         ];
     }
 

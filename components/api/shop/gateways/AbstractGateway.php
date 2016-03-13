@@ -39,7 +39,7 @@ abstract class AbstractGateway
      * Количество данных, полученных за один раз от апи
      * @var int
      */
-    protected $itemsLimit = 10;
+    protected $itemsLimit = 200;
 
     /**
      * AbstractGateway constructor.
@@ -54,7 +54,7 @@ abstract class AbstractGateway
 
     /**
      * @param QueryInterface $search
-     * @return ApiResult
+     * @return array
      * @throws ApiGatewayException
      */
     public function findByQuery(QueryInterface $search)
@@ -101,6 +101,25 @@ abstract class AbstractGateway
         }
 
         return $items;
+    }
+
+    /**
+     * Возвращает общее количество элементов
+     * @param array|QueryInterface $query
+     * @return mixed
+     * @throws ApiGatewayException
+     */
+    public function totalCount($query)
+    {
+        if ($query instanceof QueryInterface) {
+            $params = $query->getQuery();
+        } else {
+            $params = $query;
+        }
+        $params['limit'] = 1;
+        $params['page'] = 1;
+
+        return $this->execute($params)->getTotalCount();
     }
 
     /**

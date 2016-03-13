@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\ShopSearch */
@@ -20,14 +21,29 @@ $this->title = 'Список магазинов';
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+    //    'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+          //  ['class' => 'yii\grid\SerialColumn'],
 
             'id',
             'name',
             'brand_api_url:ntext',
             'product_api_url:ntext',
+            [
+                'label' => '',
+                'value' => function (\app\models\Shop $model) {
+                    return "<div class=\"dropdown\">
+                              <a class=\"dropdown-toggle\" href=\"#\" role=\"button\" data-toggle=\"dropdown\">Настройки
+                              <span class=\"caret\"></span></a>
+                              <ul class=\"dropdown-menu\">
+                                <li>" . Html::a('Настройка генератора', Url::to(['/generator/general', 'shopId' => $model->id])) ."</li>
+                                <li>" . Html::a('Ключевые слова', Url::to(['/generator/keywords', 'shopId' => $model->id])) ."</li>
+                                <li>" . Html::a('Шаблоны объявлений', Url::to(['/generator/templates', 'shopId' => $model->id])) ."</li>
+                              </ul>
+                            </div>";
+                },
+                'format' => 'raw'
+            ],
 
             [
                 'class' => 'yii\grid\ActionColumn',

@@ -18,7 +18,9 @@
         "yiisoft/yii2": ">=2.0.5",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "zendframework/zend-http": "^2.5"
+        "zendframework/zend-http": "^2.5",
+        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-editable": "^1.7"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

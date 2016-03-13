@@ -10,7 +10,7 @@ namespace app\components\api\shop\gateways;
 
 use app\components\api\shop\query\QueryInterface;
 
-class ProductGateway extends AbstractGateway
+class ProductsGateway extends AbstractGateway
 {
 
 }

@@ -11,7 +11,7 @@ namespace app\components\api\shop\gateways;
 use app\components\api\shop\query\BrandQuery;
 use app\components\api\shop\query\QueryInterface;
 
-class BrandGateway extends AbstractGateway
+class BrandsGateway extends AbstractGateway
 {
     /**
      * @param null $limit

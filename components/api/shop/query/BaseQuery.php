@@ -24,6 +24,11 @@ class BaseQuery extends Object implements QueryInterface
     protected $offset;
 
     /**
+     * @var
+     */
+    protected $page;
+
+    /**
      * @param int $limit
      * @return $this
      */
@@ -41,6 +46,24 @@ class BaseQuery extends Object implements QueryInterface
     {
         $this->offset = $offset;
         return $this;
+    }
+
+    /**
+     * @param int $page
+     * @return $this
+     */
+    public function setPage($page)
+    {
+        $this->page = $page;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPage()
+    {
+        return $this->page;
     }
 
     /**

@@ -14,26 +14,76 @@ class ProductQuery extends BaseQuery
     /**
      * @var int|int[]
      */
-    public $id;
+    protected $id;
 
     /**
      * @var float
      */
-    public $priceFrom;
+    protected $priceFrom;
 
     /**
      * @var float
      */
-    public $priceTo;
+    protected $priceTo;
 
     /**
      * @var int|int[]
      */
-    public $brandId;
+    protected $brandId;
 
     /**
      * Только активные
      * @var bool
      */
-    public $onlyActive = true;
+    protected $onlyActive = true;
+
+    /**
+     * @param int|int[] $id
+     * @return $this
+     */
+    public function byId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
+    /**
+     * @param float $from
+     * @return $this
+     */
+    public function priceFrom($from)
+    {
+        $this->priceFrom = $from;
+        return $this;
+    }
+
+    /**
+     * @param float $to
+     * @return $this
+     */
+    public function priceTo($to)
+    {
+        $this->priceTo = $to;
+        return $this;
+    }
+
+    /**
+     * @param int|int[] $id
+     * @return $this
+     */
+    public function byBrandId($id)
+    {
+        $this->brandId = $id;
+        return $this;
+    }
+
+    /**
+     * @param bool $val
+     * @return $this
+     */
+    public function onlyActive($val = true)
+    {
+        $this->onlyActive = $val;
+        return $this;
+    }
 }
