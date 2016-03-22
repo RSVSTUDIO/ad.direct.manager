@@ -12,6 +12,8 @@ use Yii;
  * @property string $brand_api_url
  * @property string $product_api_url
  * @property string $api_secret_key
+ * @property string $yandex_application_id
+ * @property string $yandex_secret
  *
  * @property Product[] $products
  */
@@ -33,6 +35,7 @@ class Shop extends \yii\db\ActiveRecord
         return [
             [['name', 'brand_api_url', 'product_api_url'], 'required'],
             [['brand_api_url', 'product_api_url', 'api_secret_key'], 'string'],
+            [['yandex_application_id', 'yandex_secret'], 'string'],
             [['name'], 'string', 'max' => 50]
         ];
     }
@@ -47,7 +50,9 @@ class Shop extends \yii\db\ActiveRecord
             'name' => 'Название магазина',
             'brand_api_url' => 'Api работы с брендами',
             'product_api_url' => 'Api работы с товарами',
-            'api_secret_key' => 'Ключ доступа к api'
+            'api_secret_key' => 'Ключ доступа к api',
+            'yandex_application_id' => 'Id yandex приложения',
+            'yandex_secret' => 'Секретный ключ'
         ];
     }
 

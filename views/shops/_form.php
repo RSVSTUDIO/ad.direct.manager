@@ -20,6 +20,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'api_secret_key')->textInput() ?>
 
+    <?= $form->field($model, 'yandex_application_id')->textInput() ?>
+
+    <?= $form->field($model, 'yandex_secret')->textInput()?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

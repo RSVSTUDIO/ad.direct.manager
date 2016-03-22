@@ -2,6 +2,10 @@
 
 namespace app\controllers;
 
+use app\lib\yandex\direct\Connection;
+use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
+use app\lib\yandex\direct\resources\Campaign;
+use app\models\YandexOauth;
 use Yii;
 use app\models\Shop;
 use app\models\search\ShopSearch;
@@ -32,6 +36,21 @@ class ShopsController extends Controller
      */
     public function actionIndex()
     {
+        //----test
+
+        $token = YandexOauth::find()->select('access_token')
+            ->where(['shop_id' => 1, 'user_id' => 1])
+            ->scalar();
+
+        $connection = new Connection($token);
+
+        $campaign = new Campaign($connection);
+        $campaign->query([]);
+        die;
+
+        //end test
+
+
         $searchModel = new ShopSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Template */
 
 $this->title = 'Обновить шаблон';
-$this->params['breadcrumbs'][] = ['label' => 'Шаблоны объявлений', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Шаблоны объявлений', 'url' => ['index', 'shopId' => Yii::$app->request->get('shopId')]];
 $this->params['breadcrumbs'][] = 'Обновление';
 ?>
 <div class="template-update">

@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model app\models\Template */
 
 $this->title = 'Создать';
-$this->params['breadcrumbs'][] = ['label' => 'Шаблоны объявлений', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Шаблоны объявлений', 'url' => ['index', 'shopId' => Yii::$app->request->get('shopId')]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="template-create">
