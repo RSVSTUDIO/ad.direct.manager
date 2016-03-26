@@ -6,7 +6,7 @@
  * Time: 19:04
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\yandex\direct\mappers;
 
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\entity\Campaign;
@@ -16,7 +16,7 @@ use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
 use yii\base\Object;
 
-abstract class AbstractResource
+abstract class Mapper
 {
     /**
      * @var Connection
@@ -110,22 +110,24 @@ abstract class AbstractResource
      */
     protected function populateModel($item, $modelClass)
     {
-        $item = YandexHelper::convertFieldNames($item);
-
         $classAttributes = $this->getAnnotationParser()
             ->parseAttributes($modelClass);
 
         $data = [];
-        foreach ($classAttributes as $field => $type) {
-            if (!isset($item[$field])) {
-                $data[$field] = null;
+        foreach ($classAttributes as $field => $fieldInfo) {
+            $type = $fieldInfo['type'];
+            $apiFieldName = $fieldInfo['apiName'];
+            $modelFieldName = $fieldInfo['modelName'];
+            
+            if (!isset($item[$apiFieldName])) {
+                $data[$modelFieldName] = null;
                 continue;
             }
 
             if (strpos($type, '\\') !== false) {
-                $data[$field] = $this->populateModel($item[$field], $type);
+                $data[$modelFieldName] = $this->populateModel($item[$apiFieldName], $type);
             } else {
-                $data[$field] = $item[$field];
+                $data[$modelFieldName] = $item[$apiFieldName];
             }
         }
 

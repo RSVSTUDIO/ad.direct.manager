@@ -45,7 +45,7 @@ class ShopsController extends Controller
 
         $connection = new Connection($token);
 
-        $campaign = new Campaign($connection);
+        $campaign = new \app\lib\yandex\direct\mappers\Campaign($connection);
         $res = $campaign->find(new CampaignQuery());
         print_r($res);
         die;

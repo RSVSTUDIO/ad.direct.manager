@@ -8,6 +8,9 @@
 
 namespace app\lib\yandex\direct\entity;
 
+use app\lib\yandex\direct\entity\campaign\DailyBudget;
+use app\lib\yandex\direct\entity\campaign\TextCampaign;
+use Faker\Provider\ar_JO\Text;
 use yii\base\Object;
 
 /**
@@ -125,4 +128,11 @@ class Campaign extends Object
      * @var \app\lib\yandex\direct\entity\campaign\TextCampaign
      */
     public $textCampaign;
+
+    public function __construct(array $config = [])
+    {
+        $this->dailyBudget = new DailyBudget();
+        $this->textCampaign = new TextCampaign();
+        parent::__construct($config);
+    }
 }

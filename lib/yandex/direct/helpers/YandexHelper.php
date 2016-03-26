@@ -38,7 +38,7 @@ class YandexHelper
      * @param string $fieldName
      * @return string
      */
-    protected function convertFieldName($fieldName)
+    public static function convertFieldName($fieldName)
     {
         if (strlen($fieldName) > 1) {
             return strtolower(substr($fieldName, 0, 1)) . substr($fieldName, 1);

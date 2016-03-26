@@ -6,9 +6,9 @@
  * Time: 21:13
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\yandex\direct\mappers;
 
-class Campaign extends AbstractResource
+class Campaign extends Mapper
 {
     public $resourceName = 'campaigns';
 

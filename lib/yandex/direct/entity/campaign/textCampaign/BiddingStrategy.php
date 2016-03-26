@@ -21,4 +21,14 @@ class BiddingStrategy extends Object
      * @var \app\lib\yandex\direct\entity\campaign\textCampaign\TextCampaignNetworkStrategy
      */
     public $network;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct(array $config = [])
+    {
+        $this->search = new TextCampaignSearchStrategy();
+        $this->network = new TextCampaignNetworkStrategy();
+        parent::__construct($config);
+    }
 }
