@@ -9,8 +9,53 @@
 namespace app\lib\yandex\direct\query;
 
 use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
+use app\lib\yandex\direct\query\selectionCriteria\Criteria;
 
+/**
+ * Класс для формирования запроса на получение кампаний
+ * Class CampaignQuery
+ * @package app\lib\yandex\direct\query
+ */
 class CampaignQuery extends AbstractQuery
 {
+    /**
+     * @var array
+     */
+    protected $fieldNames = [
+        'Id', 'Name', 'ClientInfo', 'StartDate', 'EndDate',
+        'TimeTargeting', 'TimeZone', 'NegativeKeywords', 'BlockedIps',
+        'ExcludedSites', 'DailyBudget', 'Notification', 'Type', 'Status',
+        'State', 'StatusPayment', 'StatusClarification', 'SourceId',
+        'Statistics', 'Currency', 'Funds', 'RepresentedBy',
+    ];
 
+    /**
+     * @var array
+     */
+    protected $textCampaignFieldNames = [
+        'BiddingStrategy', 'Settings', 'CounterIds',
+        'RelevantKeywords'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $dynamicTextCampaignFieldNames = [
+        'BiddingStrategy', 'Settings'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $mobileAppCampaignFieldNames = [
+        'BiddingStrategy', 'Settings'
+    ];
+
+    /**
+     * @inheritDoc
+     */
+    protected function createSelectionCriteria(array $params = [])
+    {
+        return new CampaignCriteria($params);
+    }
 }

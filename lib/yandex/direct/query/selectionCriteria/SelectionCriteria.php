@@ -8,33 +8,10 @@
 
 namespace app\lib\yandex\direct\query\selectionCriteria;
 
-use yii\base\InvalidParamException;
+use yii\base\Object;
 
-class SelectionCriteria implements SelectionCriteriaInterface
+class SelectionCriteria extends Object implements CriteriaInterface
 {
-    /**
-     * SelectionCriteria constructor.
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        $this->setFromArray($data);
-    }
-
-    /**
-     * Установить значения объекта из массива
-     * @param array $data
-     */
-    public function setFromArray(array $data)
-    {
-        foreach ($data as $field => $value) {
-            if (!property_exists($this, $field)) {
-                throw new InvalidParamException("Unknown set field - $field");
-            }
-            $this->$field = $value;
-        }
-    }
-
     /**
      * @param array $data
      * @return static

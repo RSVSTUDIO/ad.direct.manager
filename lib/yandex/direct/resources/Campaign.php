@@ -11,4 +11,6 @@ namespace app\lib\yandex\direct\resources;
 class Campaign extends AbstractResource
 {
     public $resourceName = 'campaigns';
+
+    public $modelClass = 'app\lib\yandex\direct\entity\Campaign';
 }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\lib\yandex\direct\Connection;
+use app\lib\yandex\direct\query\CampaignQuery;
 use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
 use app\lib\yandex\direct\resources\Campaign;
 use app\models\YandexOauth;
@@ -45,7 +46,8 @@ class ShopsController extends Controller
         $connection = new Connection($token);
 
         $campaign = new Campaign($connection);
-        $campaign->query([]);
+        $res = $campaign->find(new CampaignQuery());
+        print_r($res);
         die;
 
         //end test

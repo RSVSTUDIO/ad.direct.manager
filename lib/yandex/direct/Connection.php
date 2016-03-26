@@ -74,15 +74,17 @@ class Connection
     {
         $uri = rtrim($this->apiUrl, '/') . '/' . $resource;
 
+        $jsonParams = json_encode([
+            'method' => $method,
+            'params' => $params
+        ]);
+
         $response = $this->getHttpClient()
             ->setHeaders($this->getHeaders())
             ->setMethod('POST')
             ->setUri($uri)
             ->setAdapter('Zend\Http\Client\Adapter\Curl')
-            ->setParameterPost([
-                'method' => $method,
-                'params' => $params
-            ])
+            ->setRawBody($jsonParams)
             ->send();
 
         if (!$response->isSuccess()) {
@@ -97,7 +99,7 @@ class Connection
             throw new ConnectionException(json_last_error_msg());
         }
 
-        if ($result['error']) {
+        if (!empty($result['error'])) {
             throw new ConnectionException($result['error']['error_detail'], $result['error']['error_code']);
         }
 
@@ -111,7 +113,8 @@ class Connection
     {
         $headers = [
             'Accept-Language' => 'ru',
-            'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36'
+            'User-Agent' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.87 Safari/537.36',
+            'Content-type' => 'application/json'
         ];
         if ($this->authToken) {
             $headers['Authorization'] = 'Bearer ' . $this->authToken;

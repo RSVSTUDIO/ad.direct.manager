@@ -8,8 +8,17 @@
 
 namespace app\lib\yandex\direct\query\selectionCriteria;
 
+/**
+ * Классы выборки кампаний
+ * Class CampaignCriteria
+ * @package app\lib\yandex\direct\query\selectionCriteria
+ */
 class CampaignCriteria extends SelectionCriteria
 {
+    const TYPE_TEXT_CAMPAIGN = 'TEXT_CAMPAIGN';
+    const TYPE_MOBILE_CAMPAIGN = 'MOBILE_APP_CAMPAIGN';
+    const TYPE_DYNAMIC_CAMPAIGN = 'DYNAMIC_TEXT_CAMPAIGN';
+
     /**
      * @var array
      */
@@ -18,7 +27,7 @@ class CampaignCriteria extends SelectionCriteria
     /**
      * @var array
      */
-    protected $types;
+    protected $types = [self::TYPE_TEXT_CAMPAIGN];
 
     /**
      * @var array

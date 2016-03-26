@@ -8,7 +8,7 @@
 
 namespace app\lib\yandex\direct\query\selectionCriteria;
 
-interface SelectionCriteriaInterface
+interface CriteriaInterface
 {
     /**
      * Возвращает массив данных для запроса
