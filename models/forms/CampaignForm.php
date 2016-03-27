@@ -57,10 +57,12 @@ class CampaignForm extends Model
         $connection = new Connection(YandexOauth::getTokenFor($this->shopId));
         $campaignMapper = new CampaignMapper($connection);
         
-        /** @var Campaign $campaignEntity */
-        $campaignEntity = $campaignMapper->findById($this->id);
-        $campaignEntity->name = $this->name;
+        $campaign = [
+            'Id' => $this->id,
+            'Name' => $this->name,
+            'ClientInfo' => $this->clientInfo
+        ];
         
-        $campaignMapper->update($campaignEntity);
+        return $campaignMapper->update($campaign);
     }
 }

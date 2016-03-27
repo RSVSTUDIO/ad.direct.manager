@@ -15,6 +15,6 @@ class CampaignMapper extends Mapper
     public $resourceName = 'campaigns';
 
     public $entityClass = 'app\lib\yandex\direct\entity\Campaign';
-    
+
     public $queryClass = 'app\lib\yandex\direct\query\CampaignQuery';
 }

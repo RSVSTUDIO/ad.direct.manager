@@ -58,18 +58,19 @@ class CampaignController extends BaseController
         $token = YandexOauth::getTokenFor($shopId);
         $connection = new Connection($token);
         $campaignMapper = new CampaignMapper($connection);
-        /** @var Campaign $campaignEntity */
-        $campaignEntity = $campaignMapper->findById($id);
+        
+        /** @var Campaign $campaign */
+        $campaign = $campaignMapper->findById($id);
 
-        if (!$campaignEntity) {
+        if (!$campaign) {
             throw new NotFoundHttpException();
         }
 
         $campaignForm = new CampaignForm([
             'id' => $id,
-            'name' => $campaignEntity->name,
-            'currency' => $campaignEntity->currency,
-            'clientInfo' => $campaignEntity->clientInfo,
+            'name' => $campaign->name,
+            'currency' => $campaign->currency,
+            'clientInfo' => $campaign->clientInfo,
             'shopId' => $shopId
         ]);
 

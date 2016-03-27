@@ -13,7 +13,6 @@ use app\lib\yandex\direct\entity\Campaign;
 use app\lib\yandex\direct\query\AbstractQuery;
 use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
-use yii\base\Object;
 
 abstract class Mapper
 {
@@ -31,7 +30,7 @@ abstract class Mapper
     /**
      * @var string
      */
-    protected $entityClass = 'app\lib\yandex\direct\entity\BaseEntity';
+    protected $entityClass;
 
     /**
      * @var string
@@ -88,48 +87,42 @@ abstract class Mapper
         return $this->createResult($result);
     }
 
-    public function add($models)
+    public function add($params)
     {
-        
-    }
-
-    public function update($entity)
-    {
-        $params = [
-            ucfirst($this->resourceName) => [$this->convertEntityToArray($entity)]
-        ];
-
-        var_dump($params);die;
-
-        $result = $this->connection->query($this->resourceName, $params, 'update');
+        return $this->connection->query($this->resourceName, $params, 'update');
     }
 
     /**
-     * Метод преобразует модель в массив данных для запроса к апи
+     * Обновление записи
      *
-     * @param $entity
-     * @return array
+     * @param $params
+     * @return mixed
+     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
      */
-    public function convertEntityToArray(Object $entity)
+    public function update($params)
     {
-        $attributes = $this->annotationParser->parseAttributes(get_class($entity));
-        $result = [];
-        foreach ($attributes as $field => $fieldInfo) {
-            $modelFieldName = $fieldInfo['modelName'];
-            $apiFieldName = $fieldInfo['apiName'];
+        $data = [ucfirst($this->resourceName) => [$params]];
 
-            if (empty($entity->$modelFieldName)) {
-                continue;
-            }
-
-            if ($entity->$modelFieldName instanceof Object) {
-                $result[$apiFieldName] = $this->convertEntityToArray($entity->$modelFieldName);
-            } else {
-                $result[$apiFieldName] = $entity->$modelFieldName;
-            }
+        $result = $this->connection->query($this->resourceName, $data, 'update');
+        if (!empty($result['result']['UpdateResults'])) {
+            return true;
+        } else {
+            return false;
         }
+    }
 
-        return $result;
+    /**
+     * Обновление нескольких записей
+     *
+     * @param $params
+     * @return mixed
+     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     */
+    public function updateAll($params)
+    {
+        $data = [ucfirst($this->resourceName) => $params];
+
+        return $this->connection->query($this->resourceName, $data, 'update');
     }
 
     /**

@@ -18,7 +18,7 @@
 
     <?= \yii\helpers\Html::submitButton('Обновить', ['class' => 'btn btn-success'])?>
     <?= \yii\helpers\Html::a(
-        'Отмена', \yii\helpers\Url::to(['/admin/campaign', 'shopId' => Yii::$app->request->get('shopId')]), [
+        'Отмена', \yii\helpers\Url::to(['/campaign', 'shopId' => Yii::$app->request->get('shopId')]), [
             'class' => 'btn btn-default'
         ]
     )?>
