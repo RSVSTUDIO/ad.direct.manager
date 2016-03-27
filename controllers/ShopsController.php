@@ -39,16 +39,16 @@ class ShopsController extends Controller
     {
         //----test
 
-        $token = YandexOauth::find()->select('access_token')
-            ->where(['shop_id' => 1, 'user_id' => 1])
-            ->scalar();
-
-        $connection = new Connection($token);
-
-        $campaign = new \app\lib\yandex\direct\mappers\Campaign($connection);
-        $res = $campaign->find(new CampaignQuery());
-        print_r($res);
-        die;
+//        $token = YandexOauth::find()->select('access_token')
+//            ->where(['shop_id' => 1, 'user_id' => 1])
+//            ->scalar();
+//
+//        $connection = new Connection($token);
+//
+//        $campaign = new \app\lib\yandex\direct\mappers\Campaign($connection);
+//        $res = $campaign->find(new CampaignQuery());
+//        print_r($res);
+//        die;
 
         //end test
 

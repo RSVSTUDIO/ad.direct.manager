@@ -37,14 +37,6 @@ class SiteController extends BaseController
     }
 
     /**
-     * @return mixed|\yii\web\User
-     */
-    protected function getUser()
-    {
-        return Yii::$app->user;
-    }
-
-    /**
      * @inheritDoc
      */
     public function beforeAction($action)

@@ -39,6 +39,7 @@ $this->title = 'Список магазинов';
                                 <li>" . Html::a('Настройка генератора', Url::to(['/generator/general', 'shopId' => $model->id])) ."</li>
                                 <li>" . Html::a('Ключевые слова', Url::to(['/generator/keywords', 'shopId' => $model->id])) ."</li>
                                 <li>" . Html::a('Шаблоны объявлений', Url::to(['/generator/templates', 'shopId' => $model->id])) ."</li>
+                                <li>" . Html::a('Список кампаний', Url::to(['/campaign', 'shopId' => $model->id])) ."</li>
                               </ul>
                             </div>";
                 },

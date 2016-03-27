@@ -8,7 +8,7 @@
 
 namespace app\lib\yandex\direct\mappers;
 
-class Campaign extends Mapper
+class CampaignMapper extends Mapper
 {
     public $resourceName = 'campaigns';
 

@@ -36,4 +36,12 @@ class BaseController extends Controller
     {
         return \Yii::$app->response;
     }
+
+    /**
+     * @return mixed|\yii\web\User
+     */
+    protected function getUser()
+    {
+        return \Yii::$app->user;
+    }
 }
