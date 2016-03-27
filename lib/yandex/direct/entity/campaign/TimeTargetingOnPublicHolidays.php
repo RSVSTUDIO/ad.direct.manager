@@ -8,9 +8,10 @@
 
 namespace app\lib\yandex\direct\entity\campaign;
 
+use app\lib\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
-class TimeTargetingOnPublicHolidays extends Object
+class TimeTargetingOnPublicHolidays extends BaseEntity
 {
     /**
      * @var string

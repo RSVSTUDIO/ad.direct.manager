@@ -8,9 +8,10 @@
 
 namespace app\lib\yandex\direct\entity\campaign\fundsParam;
 
+use app\lib\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
-class SharedAccountFundsParam extends Object
+class SharedAccountFundsParam extends BaseEntity
 {
     /**
      * @var int

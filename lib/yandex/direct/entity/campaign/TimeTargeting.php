@@ -8,9 +8,10 @@
 
 namespace app\lib\yandex\direct\entity\campaign;
 
+use app\lib\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
-class TimeTargeting extends Object
+class TimeTargeting extends BaseEntity
 {
     /**
      * @var array

@@ -13,6 +13,7 @@ use app\controllers\BaseController;
 use app\models\forms\GeneralSettingsForm;
 use app\models\Shop;
 use yii\web\BadRequestHttpException;
+use yii\web\Response;
 
 class GeneralController extends BaseController
 {
@@ -31,5 +32,12 @@ class GeneralController extends BaseController
             'brands' => $brandsApiGateway->getBrandsList(),
             'model' => $form
         ]);
+    }
+
+    public function actionUpdateProductAvailable()
+    {
+        $this->response->format = Response::FORMAT_JSON;
+        
+        
     }
 }

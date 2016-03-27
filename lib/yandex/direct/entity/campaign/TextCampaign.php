@@ -8,10 +8,11 @@
 
 namespace app\lib\yandex\direct\entity\campaign;
 
+use app\lib\yandex\direct\entity\BaseEntity;
 use app\lib\yandex\direct\entity\campaign\textCampaign\BiddingStrategy;
 use yii\base\Object;
 
-class TextCampaign extends Object
+class TextCampaign extends BaseEntity
 {
     /**
      * @var \app\lib\yandex\direct\entity\campaign\textCampaign\BiddingStrategy

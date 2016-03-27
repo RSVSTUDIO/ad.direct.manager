@@ -59,7 +59,6 @@ class CampaignController extends BaseController
         $connection = new Connection($token);
         $campaignMapper = new CampaignMapper($connection);
         
-        /** @var Campaign $campaign */
         $campaign = $campaignMapper->findById($id);
 
         if (!$campaign) {

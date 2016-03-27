@@ -2,24 +2,23 @@
 /**
  * Created by PhpStorm.
  * User: den
- * Date: 26.03.16
- * Time: 14:40
+ * Date: 27.03.16
+ * Time: 15:59
  */
 
-namespace app\lib\yandex\direct\entity\campaign;
+namespace app\lib\yandex\direct\entity\keyword;
 
 use app\lib\yandex\direct\entity\BaseEntity;
-use yii\base\Object;
 
 class Statistics extends BaseEntity
 {
     /**
      * @var int
      */
-    public $impressions;
+    public $clicks;
 
     /**
      * @var int
      */
-    public $clicks;
+    public $impressions;
 }

@@ -17,7 +17,7 @@ use yii\base\Object;
  * Class Campaign
  * @package app\lib\yandex\direct\entity
  */
-class Campaign extends Object
+class Campaign extends BaseEntity
 {
     /**
      * @var int

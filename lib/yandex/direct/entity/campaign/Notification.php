@@ -7,9 +7,10 @@
  */
 
 namespace app\lib\yandex\direct\entity\campaign;
+use app\lib\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
-class Notification extends Object
+class Notification extends BaseEntity
 {
     /**
      * @var \app\lib\yandex\direct\entity\campaign\notification\EmailSettings

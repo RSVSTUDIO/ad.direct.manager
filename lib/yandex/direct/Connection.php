@@ -72,7 +72,7 @@ class Connection
      */
     public function query($resource, array $params = [], $method = 'get')
     {
-        $uri = rtrim($this->apiUrl, '/') . '/' . $resource;
+        $uri = rtrim($this->apiUrl, '/') . '/' . strtolower($resource);
 
         $jsonParams = json_encode([
             'method' => $method,

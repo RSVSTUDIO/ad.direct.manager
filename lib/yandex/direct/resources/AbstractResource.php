@@ -6,7 +6,7 @@
  * Time: 19:04
  */
 
-namespace app\lib\yandex\direct\mappers;
+namespace app\lib\yandex\direct\resources;
 
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\entity\Campaign;
@@ -14,8 +14,9 @@ use app\lib\yandex\direct\query\AbstractQuery;
 use app\lib\yandex\direct\query\ModifyResult;
 use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
+use yii\helpers\ArrayHelper;
 
-abstract class Mapper
+abstract class AbstractResource
 {
     /**
      * @var Connection
@@ -31,17 +32,7 @@ abstract class Mapper
     /**
      * @var string
      */
-    protected $entityClass;
-
-    /**
-     * @var string
-     */
     protected $queryClass;
-
-    /**
-     * @var AnnotationParser
-     */
-    protected $annotationParser;
 
     /**
      * AbstractResource constructor.
@@ -88,9 +79,24 @@ abstract class Mapper
         return $this->createResult($result);
     }
 
+    /**
+     * Добавление новых ресурсов
+     * @param array|array[] $params
+     * @return ModifyResult
+     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     */
     public function add($params)
     {
-        return $this->connection->query($this->resourceName, $params, 'update');
+        $resourceName = ucfirst($this->resourceName);
+        if (ArrayHelper::isAssociative($params)) {
+            $params = [$params];
+        }
+
+        $data = [$resourceName => $params];
+
+        $result = $this->connection->query($this->resourceName, $data, 'add');
+
+        return new ModifyResult($result['result']['AddResults']);
     }
 
     /**
@@ -146,49 +152,6 @@ abstract class Mapper
             $meta['limitedBy'] = $result['LimitedBy'];
         }
 
-        return new Result($result['result'][$resultField], $meta);
-    }
-
-    /**
-     * @param array $item
-     * @param string $modelClass
-     * @return Object
-     */
-    protected function populateModel($item, $modelClass)
-    {
-        $classAttributes = $this->getAnnotationParser()
-            ->parseAttributes($modelClass);
-
-        $data = [];
-        foreach ($classAttributes as $field => $fieldInfo) {
-            $type = $fieldInfo['type'];
-            $apiFieldName = $fieldInfo['apiName'];
-            $modelFieldName = $fieldInfo['modelName'];
-            
-            if (!isset($item[$apiFieldName])) {
-                $data[$modelFieldName] = null;
-                continue;
-            }
-
-            if (strpos($type, '\\') !== false) {
-                $data[$modelFieldName] = $this->populateModel($item[$apiFieldName], $type);
-            } else {
-                $data[$modelFieldName] = $item[$apiFieldName];
-            }
-        }
-
-        return new $modelClass($data);
-    }
-
-    /**
-     * @return AnnotationParser
-     */
-    protected function getAnnotationParser()
-    {
-        if (is_null($this->annotationParser)) {
-            $this->annotationParser = new AnnotationParser();
-        }
-
-        return $this->annotationParser;
+        return new Result($result[$resultField], $meta);
     }
 }
