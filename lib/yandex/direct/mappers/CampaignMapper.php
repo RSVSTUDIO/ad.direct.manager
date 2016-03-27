@@ -8,9 +8,13 @@
 
 namespace app\lib\yandex\direct\mappers;
 
+use app\lib\yandex\direct\query\CampaignQuery;
+
 class CampaignMapper extends Mapper
 {
     public $resourceName = 'campaigns';
 
-    public $modelClass = 'app\lib\yandex\direct\entity\Campaign';
+    public $entityClass = 'app\lib\yandex\direct\entity\Campaign';
+    
+    public $queryClass = 'app\lib\yandex\direct\query\CampaignQuery';
 }

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\query\YandexOauthQuery;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -75,9 +76,20 @@ class YandexOauth extends ActiveRecord
      * @param int $userId
      * @return mixed
      */
-    public static function getTokenFor($shopId, $userId)
+    public static function getTokenFor($shopId, $userId = null)
     {
+        if (!$userId) {
+            $userId = Yii::$app->user->getId();
+        }
         $oauthToken = self::find()->where(['shop_id' => $shopId, 'user_id' => $userId])->one();
-        return ArrayHelper::getValue($oauthToken, 'token');
+        return ArrayHelper::getValue($oauthToken, 'access_token');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function find()
+    {
+        return new YandexOauthQuery(get_called_class());
     }
 }

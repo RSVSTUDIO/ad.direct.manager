@@ -129,7 +129,7 @@ class Result implements \ArrayAccess, \Iterator
      */
     public function first()
     {
-        return $this->items[0];
+        return reset($this->items);
     }
 
     /**
@@ -146,5 +146,13 @@ class Result implements \ArrayAccess, \Iterator
     public function isAllReceived()
     {
         return $this->lastReturnedId() === null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function count()
+    {
+        return count($this->items);
     }
 }

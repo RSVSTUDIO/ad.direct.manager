@@ -10,7 +10,6 @@ namespace app\lib\yandex\direct\mappers;
 
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\entity\Campaign;
-use app\lib\yandex\direct\helpers\YandexHelper;
 use app\lib\yandex\direct\query\AbstractQuery;
 use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
@@ -32,7 +31,12 @@ abstract class Mapper
     /**
      * @var string
      */
-    protected $modelClass = 'app\lib\yandex\direct\models\BaseModel';
+    protected $entityClass = 'app\lib\yandex\direct\entity\BaseEntity';
+
+    /**
+     * @var string
+     */
+    protected $queryClass;
 
     /**
      * @var AnnotationParser
@@ -46,6 +50,24 @@ abstract class Mapper
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+    }
+
+    /**
+     * Поиск сущности по id
+     *
+     * @param mixed $id
+     * @return mixed|null
+     */
+    public function findById($id)
+    {
+        $query = new $this->queryClass(['ids' => $id]);
+        $result = $this->find($query);
+        
+        if ($result->count() > 0) {
+            return $result->first();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -71,9 +93,43 @@ abstract class Mapper
         
     }
 
-    public function update()
+    public function update($entity)
     {
-        
+        $params = [
+            ucfirst($this->resourceName) => [$this->convertEntityToArray($entity)]
+        ];
+
+        var_dump($params);die;
+
+        $result = $this->connection->query($this->resourceName, $params, 'update');
+    }
+
+    /**
+     * Метод преобразует модель в массив данных для запроса к апи
+     *
+     * @param $entity
+     * @return array
+     */
+    public function convertEntityToArray(Object $entity)
+    {
+        $attributes = $this->annotationParser->parseAttributes(get_class($entity));
+        $result = [];
+        foreach ($attributes as $field => $fieldInfo) {
+            $modelFieldName = $fieldInfo['modelName'];
+            $apiFieldName = $fieldInfo['apiName'];
+
+            if (empty($entity->$modelFieldName)) {
+                continue;
+            }
+
+            if ($entity->$modelFieldName instanceof Object) {
+                $result[$apiFieldName] = $this->convertEntityToArray($entity->$modelFieldName);
+            } else {
+                $result[$apiFieldName] = $entity->$modelFieldName;
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -92,7 +148,7 @@ abstract class Mapper
         $result = $result['result'];
 
         foreach ($result[$resultField] as $item) {
-            $items[] = $this->populateModel($item, $this->modelClass);
+            $items[] = $this->populateModel($item, $this->entityClass);
         }
 
         $meta = [];

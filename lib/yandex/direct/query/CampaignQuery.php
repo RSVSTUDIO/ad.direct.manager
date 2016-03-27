@@ -15,6 +15,8 @@ use app\lib\yandex\direct\query\selectionCriteria\Criteria;
  * Класс для формирования запроса на получение кампаний
  * Class CampaignQuery
  * @package app\lib\yandex\direct\query
+ *
+ * @property CampaignCriteria $selectionCriteria
  */
 class CampaignQuery extends AbstractQuery
 {

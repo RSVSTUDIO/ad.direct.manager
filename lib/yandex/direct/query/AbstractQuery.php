@@ -11,9 +11,10 @@ namespace app\lib\yandex\direct\query;
 use app\lib\yandex\direct\query\selectionCriteria\LimitOffset;
 use app\lib\yandex\direct\query\selectionCriteria\Criteria;
 use app\lib\yandex\direct\query\selectionCriteria\CriteriaInterface;
+use yii\base\Object;
 use yii\gii\generators\extension\CriteriaException;
 
-abstract class AbstractQuery
+abstract class AbstractQuery extends Object
 {
     /**
      * @var CriteriaInterface
@@ -36,11 +37,13 @@ abstract class AbstractQuery
      * AbstractQuery constructor.
      * @param null|array|CriteriaInterface $criteria
      * @param array $page
+     * @param array $config
      */
-    public function __construct($criteria = [], $page = [])
+    public function __construct($criteria = [], $page = [], $config = [])
     {
         $this->setSelectionCriteria($criteria);
         $this->setPage($page);
+        parent::__construct($config);
     }
 
     /**
@@ -108,8 +111,8 @@ abstract class AbstractQuery
     {
         if ($selectionCriteria instanceof CriteriaInterface) {
             $this->selectionCriteria = $selectionCriteria;
-        } elseif (is_array($selectionCriteria) || is_null($selectionCriteria)) {
-            $this->selectionCriteria = $this->createSelectionCriteria((array)$selectionCriteria);
+        } elseif (is_array($selectionCriteria)) {
+            $this->selectionCriteria = $this->createSelectionCriteria($selectionCriteria);
         } else {
             throw new CriteriaException('Wrong selection criteria');
         }
@@ -148,6 +151,7 @@ abstract class AbstractQuery
     }
 
     /**
+     * Фабричный метод создания критерии для конкретного запроса
      * @param array $params
      * @return mixed
      */
