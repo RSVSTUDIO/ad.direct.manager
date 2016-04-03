@@ -11,7 +11,7 @@ namespace app\lib\yandex\direct\resources;
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\entity\Campaign;
 use app\lib\yandex\direct\query\AbstractQuery;
-use app\lib\yandex\direct\query\ModifyResult;
+use app\lib\yandex\direct\query\ChangeResult;
 use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
 use yii\helpers\ArrayHelper;
@@ -82,7 +82,7 @@ abstract class AbstractResource
     /**
      * Добавление новых ресурсов
      * @param array|array[] $params
-     * @return ModifyResult
+     * @return ChangeResult
      * @throws \app\lib\yandex\direct\exceptions\ConnectionException
      */
     public function add($params)
@@ -96,7 +96,7 @@ abstract class AbstractResource
 
         $result = $this->connection->query($this->resourceName, $data, 'add');
 
-        return new ModifyResult($result['result']['AddResults']);
+        return new ChangeResult($result['result']['AddResults']);
     }
 
     /**
@@ -113,7 +113,7 @@ abstract class AbstractResource
 
         $result = $this->connection->query($this->resourceName, $data, 'update');
 
-        return new ModifyResult($result[$resourceName]);
+        return new ChangeResult($result[$resourceName]);
     }
 
     /**
@@ -130,7 +130,7 @@ abstract class AbstractResource
 
         $result = $this->connection->query($this->resourceName, $data, 'update');
 
-        return new ModifyResult($result[$resourceName]);
+        return new ChangeResult($result[$resourceName]);
     }
 
     /**

@@ -30,7 +30,7 @@ class ProductsApiDataProvider extends ApiDataProvider
                 ];
             } else {
                 $productAdditional = [
-                    'seo_title' => $item['title'],
+                    'seo_title' => '',
                     'keywords' => ''
                 ];
             }

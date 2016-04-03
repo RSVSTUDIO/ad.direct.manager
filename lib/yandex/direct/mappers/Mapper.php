@@ -11,7 +11,7 @@ namespace app\lib\yandex\direct\mappers;
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\entity\Campaign;
 use app\lib\yandex\direct\query\AbstractQuery;
-use app\lib\yandex\direct\query\ModifyResult;
+use app\lib\yandex\direct\query\ChangeResult;
 use app\lib\yandex\direct\query\Result;
 use app\lib\yandex\direct\system\AnnotationParser;
 
@@ -107,7 +107,7 @@ abstract class Mapper
 
         $result = $this->connection->query($this->resourceName, $data, 'update');
 
-        return new ModifyResult($result[$resourceName]);
+        return new ChangeResult($result[$resourceName]);
     }
 
     /**
@@ -124,7 +124,7 @@ abstract class Mapper
 
         $result = $this->connection->query($this->resourceName, $data, 'update');
 
-        return new ModifyResult($result[$resourceName]);
+        return new ChangeResult($result[$resourceName]);
     }
 
     /**

@@ -14,7 +14,7 @@ class ProductQuery extends BaseQuery
     /**
      * @var int|int[]
      */
-    protected $id;
+    protected $ids;
 
     /**
      * @var float
@@ -38,12 +38,12 @@ class ProductQuery extends BaseQuery
     protected $onlyActive = true;
 
     /**
-     * @param int|int[] $id
+     * @param int|int[] $ids
      * @return $this
      */
-    public function byId($id)
+    public function byIds($ids)
     {
-        $this->id = $id;
+        $this->ids= $ids;
         return $this;
     }
 

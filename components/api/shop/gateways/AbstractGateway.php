@@ -63,6 +63,15 @@ abstract class AbstractGateway
     }
 
     /**
+     * @param int|int[] $ids
+     * @return array
+     */
+    public function findByIds($ids)
+    {
+        return $this->query(['ids' => implode(',', (array)$ids)]);
+    }
+
+    /**
      * Выполнение запроса
      *
      * @param array|QueryInterface $query
