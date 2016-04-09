@@ -6,7 +6,7 @@
  * Time: 8:43
  */
 
-namespace app\lib\yandex\direct\entity;
+namespace app\lib\api\yandex\direct\entity;
 
 
 use yii\base\Object;

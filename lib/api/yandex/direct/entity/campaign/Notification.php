@@ -6,19 +6,19 @@
  * Time: 14:33
  */
 
-namespace app\lib\yandex\direct\entity\campaign;
-use app\lib\yandex\direct\entity\BaseEntity;
+namespace app\lib\api\yandex\direct\entity\campaign;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
 class Notification extends BaseEntity
 {
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\notification\EmailSettings
+     * @var \app\lib\api\yandex\direct\entity\campaign\notification\EmailSettings
      */
     public $smsSettings;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\notification\SmsSettings
+     * @var \app\lib\api\yandex\direct\entity\campaign\notification\SmsSettings
      */
     public $emailSettings;
 }

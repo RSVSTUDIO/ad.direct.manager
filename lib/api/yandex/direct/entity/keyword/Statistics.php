@@ -6,9 +6,9 @@
  * Time: 15:59
  */
 
-namespace app\lib\yandex\direct\entity\keyword;
+namespace app\lib\api\yandex\direct\entity\keyword;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 
 class Statistics extends BaseEntity
 {

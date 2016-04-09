@@ -6,7 +6,7 @@
  * Time: 23:06
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
 class VCards extends AbstractResource
 {

@@ -6,12 +6,12 @@
  * Time: 20:56
  */
 
-namespace app\lib\yandex\direct\query\selectionCriteria;
+namespace app\lib\api\yandex\direct\query\selectionCriteria;
 
 /**
  * Классы выборки кампаний
  * Class CampaignCriteria
- * @package app\lib\yandex\direct\query\selectionCriteria
+ * @package app\lib\api\yandex\direct\query\selectionCriteria
  */
 class CampaignCriteria extends SelectionCriteria
 {

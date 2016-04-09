@@ -6,7 +6,7 @@
  * Time: 15:53
  */
 
-namespace app\lib\yandex\direct\entity;
+namespace app\lib\api\yandex\direct\entity;
 
 
 class Keyword extends BaseEntity
@@ -67,12 +67,12 @@ class Keyword extends BaseEntity
     public $state;
 
     /**
-     * @var \app\lib\yandex\direct\entity\keyword\Statistics
+     * @var \app\lib\api\yandex\direct\entity\keyword\Statistics
      */
     public $statisticsSearch;
 
     /**
-     * @var \app\lib\yandex\direct\entity\keyword\Statistics
+     * @var \app\lib\api\yandex\direct\entity\keyword\Statistics
      */
     public $statisticsNetwork;
 }

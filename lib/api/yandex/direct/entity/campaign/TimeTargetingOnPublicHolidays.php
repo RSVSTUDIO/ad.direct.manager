@@ -6,9 +6,9 @@
  * Time: 16:50
  */
 
-namespace app\lib\yandex\direct\entity\campaign;
+namespace app\lib\api\yandex\direct\entity\campaign;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
 class TimeTargetingOnPublicHolidays extends BaseEntity

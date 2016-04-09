@@ -6,7 +6,7 @@
  * Time: 22:23
  */
 
-namespace app\components\api\shop\query;
+namespace app\lib\api\shop\query;
 
 use yii\base\Object;
 use yii\helpers\Inflector;

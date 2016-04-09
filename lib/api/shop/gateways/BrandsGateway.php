@@ -6,10 +6,10 @@
  * Time: 16:53
  */
 
-namespace app\components\api\shop\gateways;
+namespace app\lib\api\shop\gateways;
 
-use app\components\api\shop\query\BrandQuery;
-use app\components\api\shop\query\QueryInterface;
+use app\lib\api\shop\query\BrandQuery;
+use app\lib\api\shop\query\QueryInterface;
 
 class BrandsGateway extends AbstractGateway
 {

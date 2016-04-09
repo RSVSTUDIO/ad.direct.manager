@@ -6,11 +6,11 @@
  * Time: 22:41
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
 class KeywordsResource extends AbstractResource
 {
     protected $resourceName = 'Keywords';
     
-    protected $queryClass = 'app\lib\yandex\direct\query\KeywordsQuery';
+    protected $queryClass = 'app\lib\api\yandex\direct\query\KeywordsQuery';
 }

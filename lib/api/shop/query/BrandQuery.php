@@ -6,7 +6,7 @@
  * Time: 22:06
  */
 
-namespace app\components\api\shop\query;
+namespace app\lib\api\shop\query;
 
 class BrandQuery extends BaseQuery
 {

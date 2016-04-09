@@ -6,9 +6,9 @@
  * Time: 17:10
  */
 
-namespace app\lib\yandex\direct\entity\campaign\notification;
+namespace app\lib\api\yandex\direct\entity\campaign\notification;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
 class SmsSettings extends BaseEntity

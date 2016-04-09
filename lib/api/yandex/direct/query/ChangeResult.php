@@ -6,7 +6,7 @@
  * Time: 19:03
  */
 
-namespace app\lib\yandex\direct\query;
+namespace app\lib\api\yandex\direct\query;
 
 use yii\helpers\ArrayHelper;
 

@@ -6,7 +6,7 @@
  * Time: 21:56
  */
 
-namespace app\lib\yandex\direct\query\selectionCriteria;
+namespace app\lib\api\yandex\direct\query\selectionCriteria;
 
 use yii\base\Object;
 

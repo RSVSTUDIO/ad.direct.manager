@@ -6,9 +6,9 @@
  * Time: 20:39
  */
 
-namespace app\lib\yandex\direct\query\keywords;
+namespace app\lib\api\yandex\direct\query\keywords;
 
-use app\lib\yandex\direct\query\selectionCriteria\SelectionCriteria;
+use app\lib\api\yandex\direct\query\selectionCriteria\SelectionCriteria;
 
 class KeywordsSelectionCriteria extends SelectionCriteria
 {

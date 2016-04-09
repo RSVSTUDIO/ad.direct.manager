@@ -6,7 +6,7 @@
  * Time: 15:45
  */
 
-namespace app\lib\yandex\direct\entity;
+namespace app\lib\api\yandex\direct\entity;
 
 
 class Ad extends BaseEntity
@@ -57,7 +57,7 @@ class Ad extends BaseEntity
     public $type;
 
     /**
-     * @var \app\lib\yandex\direct\entity\ad\TextAdGet
+     * @var \app\lib\api\yandex\direct\entity\ad\TextAdGet
      */
     public $textAd;
 }

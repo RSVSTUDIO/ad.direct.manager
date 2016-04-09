@@ -8,7 +8,7 @@
 
 namespace app\lib\services;
 
-use app\lib\yandex\direct\resources\KeywordsResource;
+use app\lib\api\yandex\direct\resources\KeywordsResource;
 use app\models\Product;
 
 class KeywordsService

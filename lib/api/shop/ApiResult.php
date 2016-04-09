@@ -6,7 +6,7 @@
  * Time: 12:03
  */
 
-namespace app\components\api\shop;
+namespace app\lib\api\shop;
 
 class ApiResult implements \Iterator
 {

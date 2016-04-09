@@ -6,12 +6,12 @@
  * Time: 10:10
  */
 
-namespace app\lib\yandex\direct\query;
+namespace app\lib\api\yandex\direct\query;
 
 /**
  * Результат запроса к api
  * Class Result
- * @package app\lib\yandex\direct\query
+ * @package app\lib\api\yandex\direct\query
  */
 class Result implements \ArrayAccess, \Iterator
 {

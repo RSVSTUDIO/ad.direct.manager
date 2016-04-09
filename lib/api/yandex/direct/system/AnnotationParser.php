@@ -6,9 +6,9 @@
  * Time: 15:25
  */
 
-namespace app\lib\yandex\direct\system;
+namespace app\lib\api\yandex\direct\system;
 
-use app\lib\yandex\direct\helpers\YandexHelper;
+use app\lib\api\yandex\direct\helpers\YandexHelper;
 
 class AnnotationParser
 {

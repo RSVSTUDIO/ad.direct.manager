@@ -6,9 +6,9 @@
  * Time: 20:28
  */
 
-namespace app\lib\yandex\direct\query\ad;
+namespace app\lib\api\yandex\direct\query\ad;
 
-use app\lib\yandex\direct\query\selectionCriteria\SelectionCriteria;
+use app\lib\api\yandex\direct\query\selectionCriteria\SelectionCriteria;
 
 class AdSelectionCriteria extends SelectionCriteria
 {

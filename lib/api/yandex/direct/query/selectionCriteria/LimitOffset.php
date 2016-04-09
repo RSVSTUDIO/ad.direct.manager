@@ -6,7 +6,7 @@
  * Time: 19:28
  */
 
-namespace app\lib\yandex\direct\query\selectionCriteria;
+namespace app\lib\api\yandex\direct\query\selectionCriteria;
 
 class LimitOffset extends SelectionCriteria
 {

@@ -6,7 +6,7 @@
  * Time: 16:32
  */
 
-namespace app\components\api\shop\exceptions;
+namespace app\lib\api\shop\exceptions;
 
 use yii\base\Exception;
 

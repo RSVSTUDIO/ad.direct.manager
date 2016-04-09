@@ -6,16 +6,16 @@
  * Time: 8:50
  */
 
-namespace app\lib\yandex\direct\entity;
+namespace app\lib\api\yandex\direct\entity;
 
-use app\lib\yandex\direct\entity\campaign\DailyBudget;
-use app\lib\yandex\direct\entity\campaign\TextCampaign;
+use app\lib\api\yandex\direct\entity\campaign\DailyBudget;
+use app\lib\api\yandex\direct\entity\campaign\TextCampaign;
 use Faker\Provider\ar_JO\Text;
 use yii\base\Object;
 
 /**
  * Class Campaign
- * @package app\lib\yandex\direct\entity
+ * @package app\lib\api\yandex\direct\entity
  */
 class Campaign extends BaseEntity
 {
@@ -40,7 +40,7 @@ class Campaign extends BaseEntity
     public $clientInfo;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\TimeTargeting
+     * @var \app\lib\api\yandex\direct\entity\campaign\TimeTargeting
      */
     public $timeTargeting;
 
@@ -65,12 +65,12 @@ class Campaign extends BaseEntity
     public $excludedSites = [];
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\DailyBudget
+     * @var \app\lib\api\yandex\direct\entity\campaign\DailyBudget
      */
     public $dailyBudget;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\Notification
+     * @var \app\lib\api\yandex\direct\entity\campaign\Notification
      */
     public $notification;
 
@@ -105,7 +105,7 @@ class Campaign extends BaseEntity
     public $sourceId;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\Statistics
+     * @var \app\lib\api\yandex\direct\entity\campaign\Statistics
      */
     public $statistics;
 
@@ -115,17 +115,17 @@ class Campaign extends BaseEntity
     public $currency;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\FundsParam
+     * @var \app\lib\api\yandex\direct\entity\campaign\FundsParam
      */
     public $funds;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\CampaignAssistant
+     * @var \app\lib\api\yandex\direct\entity\campaign\CampaignAssistant
      */
     public $representedBy;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\TextCampaign
+     * @var \app\lib\api\yandex\direct\entity\campaign\TextCampaign
      */
     public $textCampaign;
 

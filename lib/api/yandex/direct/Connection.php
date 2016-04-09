@@ -6,9 +6,9 @@
  * Time: 11:56
  */
 
-namespace app\lib\yandex\direct;
+namespace app\lib\api\yandex\direct;
 
-use app\lib\yandex\direct\exceptions\ConnectionException;
+use app\lib\api\yandex\direct\exceptions\ConnectionException;
 use Zend\Http\Client;
 
 class Connection

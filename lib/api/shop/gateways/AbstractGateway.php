@@ -6,16 +6,16 @@
  * Time: 21:02
  */
 
-namespace app\components\api\shop\gateways;
+namespace app\lib\api\shop\gateways;
 
-use app\components\api\shop\exceptions\ApiGatewayException;
-use app\components\api\shop\ApiResult;
-use app\components\api\shop\query\QueryInterface;
+use app\lib\api\shop\exceptions\ApiGatewayException;
+use app\lib\api\shop\ApiResult;
+use app\lib\api\shop\query\QueryInterface;
 use Zend\Http\Client;
 
 /**
  * Class AbstractGateway
- * @package app\components\productsSource\gateways
+ * @package app\lib\productsSource\gateways
  */
 abstract class AbstractGateway
 {

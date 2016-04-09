@@ -6,13 +6,13 @@
  * Time: 21:28
  */
 
-namespace app\lib\yandex\direct\query;
+namespace app\lib\api\yandex\direct\query;
 
-use app\lib\yandex\direct\query\adGroup\AdGroupSelectionCriteria;
+use app\lib\api\yandex\direct\query\adGroup\AdGroupSelectionCriteria;
 
 /**
  * Class AdGroupQuery
- * @package app\lib\yandex\direct\query
+ * @package app\lib\api\yandex\direct\query
  *
  * @property AdGroupSelectionCriteria $selectionCriteria
  */

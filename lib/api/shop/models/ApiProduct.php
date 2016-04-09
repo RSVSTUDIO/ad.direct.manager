@@ -6,7 +6,7 @@
  * Time: 14:59
  */
 
-namespace app\components\api\shop\models;
+namespace app\lib\api\shop\models;
 
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -15,7 +15,7 @@ use yii\helpers\Inflector;
 /**
  * Class ApiProduct
  * Обертка над возвращаемыми апи товарами
- * @package app\components\api\shop\models
+ * @package app\lib\api\shop\models
  */
 class ApiProduct extends Model
 {

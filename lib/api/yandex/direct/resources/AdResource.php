@@ -6,15 +6,15 @@
  * Time: 20:27
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
-use app\lib\yandex\direct\query\ChangeResult;
+use app\lib\api\yandex\direct\query\ChangeResult;
 
 class AdResource extends AbstractResource
 {
     public $resourceName = 'Ads';
     
-    public $queryClass = 'app\lib\yandex\direct\query\AdQuery';
+    public $queryClass = 'app\lib\api\yandex\direct\query\AdQuery';
 
     /**
      * Остановка показа объявлений

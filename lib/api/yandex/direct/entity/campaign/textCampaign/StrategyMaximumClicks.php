@@ -6,9 +6,9 @@
  * Time: 18:31
  */
 
-namespace app\lib\yandex\direct\entity\campaign\textCampaign;
+namespace app\lib\api\yandex\direct\entity\campaign\textCampaign;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 
 class StrategyMaximumClicks extends BaseEntity
 {

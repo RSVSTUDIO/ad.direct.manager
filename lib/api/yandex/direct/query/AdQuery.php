@@ -8,8 +8,8 @@
 
 namespace app\components\api\shop\query;
 
-use app\lib\yandex\direct\query\AbstractQuery;
-use app\lib\yandex\direct\query\ad\AdSelectionCriteria;
+use app\lib\api\yandex\direct\query\AbstractQuery;
+use app\lib\api\yandex\direct\query\ad\AdSelectionCriteria;
 
 class AdQuery extends AbstractQuery
 {

@@ -6,11 +6,11 @@
  * Time: 22:41
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
 class AdGroupResource extends AbstractResource
 {
     protected $resourceName = 'AdGroups';
     
-    protected $queryClass = 'app\lib\yandex\direct\query\AdGroupQuery';
+    protected $queryClass = 'app\lib\api\yandex\direct\query\AdGroupQuery';
 }

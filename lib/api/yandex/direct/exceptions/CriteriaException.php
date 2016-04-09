@@ -8,7 +8,7 @@
 
 namespace yii\gii\generators\extension;
 
-use app\lib\yandex\direct\exceptions\YandexException;
+use app\lib\api\yandex\direct\exceptions\YandexException;
 
 class CriteriaException extends YandexException
 {

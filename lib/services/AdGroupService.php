@@ -8,8 +8,8 @@
 
 namespace app\lib\services;
 
-use app\lib\yandex\direct\exceptions\YandexException;
-use app\lib\yandex\direct\resources\AdGroupResource;
+use app\lib\api\yandex\direct\exceptions\YandexException;
+use app\lib\api\yandex\direct\resources\AdGroupResource;
 use app\models\Product;
 use app\models\YandexCampaign;
 

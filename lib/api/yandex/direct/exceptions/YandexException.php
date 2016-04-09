@@ -6,7 +6,7 @@
  * Time: 21:19
  */
 
-namespace app\lib\yandex\direct\exceptions;
+namespace app\lib\api\yandex\direct\exceptions;
 
 use yii\base\Exception;
 

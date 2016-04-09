@@ -6,12 +6,12 @@
  * Time: 21:13
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
 
 class CampaignResource extends AbstractResource
 {
     public $resourceName = 'campaigns';
 
-    public $queryClass = 'app\lib\yandex\direct\query\CampaignQuery';
+    public $queryClass = 'app\lib\api\yandex\direct\query\CampaignQuery';
 }

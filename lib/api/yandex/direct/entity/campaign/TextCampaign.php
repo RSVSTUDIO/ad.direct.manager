@@ -6,16 +6,16 @@
  * Time: 15:11
  */
 
-namespace app\lib\yandex\direct\entity\campaign;
+namespace app\lib\api\yandex\direct\entity\campaign;
 
-use app\lib\yandex\direct\entity\BaseEntity;
-use app\lib\yandex\direct\entity\campaign\textCampaign\BiddingStrategy;
+use app\lib\api\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\campaign\textCampaign\BiddingStrategy;
 use yii\base\Object;
 
 class TextCampaign extends BaseEntity
 {
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\BiddingStrategy
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\BiddingStrategy
      */
     public $biddingStrategy;
 
@@ -24,7 +24,7 @@ class TextCampaign extends BaseEntity
     public $counterIds;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\RelevantKeywords
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\RelevantKeywords
      */
     public $relevantKeywords;
 

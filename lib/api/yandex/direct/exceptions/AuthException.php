@@ -6,7 +6,7 @@
  * Time: 21:20
  */
 
-namespace app\lib\yandex\direct\exceptions;
+namespace app\lib\api\yandex\direct\exceptions;
 
 class AuthException extends YandexException
 {

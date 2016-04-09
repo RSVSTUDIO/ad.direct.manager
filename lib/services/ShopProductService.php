@@ -8,8 +8,8 @@
 
 namespace app\lib\services;
 
-use app\components\api\shop\gateways\ProductsGateway;
-use app\components\api\shop\models\ApiProduct;
+use app\lib\api\shop\gateways\ProductsGateway;
+use app\lib\api\shop\models\ApiProduct;
 use app\models\Product;
 use yii\helpers\ArrayHelper;
 

@@ -6,9 +6,9 @@
  * Time: 18:56
  */
 
-namespace app\lib\yandex\direct\entity\campaign\textCampaign;
+namespace app\lib\api\yandex\direct\entity\campaign\textCampaign;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 
 class TextCampaignNetworkStrategy extends BaseEntity
 {
@@ -18,37 +18,37 @@ class TextCampaignNetworkStrategy extends BaseEntity
     public $biddingStrategyType;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyNetworkDefault
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyNetworkDefault
      */
     public $networkDefault;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyMaximumClicks
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyMaximumClicks
      */
     public $wbMaximumClicks;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyMaximumConversionRate
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyMaximumConversionRate
      */
     public $wbMaximumConversionRate;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyAverageCpc
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyAverageCpc
      */
     public $averageCpc;
 
     /***
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyAverageCpa
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyAverageCpa
      */
     public $averageCpa;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyWeeklyClickPackage
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyWeeklyClickPackage
      */
     public $weeklyClickPackage;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\textCampaign\StrategyAverageRoi
+     * @var \app\lib\api\yandex\direct\entity\campaign\textCampaign\StrategyAverageRoi
      */
     public $averageRoi;
 }

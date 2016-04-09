@@ -6,15 +6,15 @@
  * Time: 21:13
  */
 
-namespace app\lib\yandex\direct\mappers;
+namespace app\lib\api\yandex\direct\mappers;
 
-use app\lib\yandex\direct\query\CampaignQuery;
+use app\lib\api\yandex\direct\query\CampaignQuery;
 
 class CampaignMapper extends Mapper
 {
     public $resourceName = 'campaigns';
 
-    public $entityClass = 'app\lib\yandex\direct\entity\Campaign';
+    public $entityClass = 'app\lib\api\yandex\direct\entity\Campaign';
 
-    public $queryClass = 'app\lib\yandex\direct\query\CampaignQuery';
+    public $queryClass = 'app\lib\api\yandex\direct\query\CampaignQuery';
 }

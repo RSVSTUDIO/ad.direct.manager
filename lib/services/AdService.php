@@ -8,9 +8,9 @@
 
 namespace app\lib\services;
 
-use app\components\api\shop\models\ApiProduct;
-use app\lib\yandex\direct\exceptions\YandexException;
-use app\lib\yandex\direct\resources\AdResource;
+use app\lib\api\shop\models\ApiProduct;
+use app\lib\api\yandex\direct\exceptions\YandexException;
+use app\lib\api\yandex\direct\resources\AdResource;
 use app\models\Product;
 use app\models\Template;
 

@@ -8,23 +8,18 @@
 
 namespace app\commands;
 
-use app\components\api\shop\gateways\ProductsGateway;
-use app\components\api\shop\query\ProductQuery;
+use app\lib\api\shop\gateways\ProductsGateway;
 use app\lib\services\AdGroupService;
 use app\lib\services\AdService;
 use app\lib\services\ShopProductService;
 use app\lib\services\YandexCampaignService;
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\query\AdGroupQuery;
-use app\lib\yandex\direct\query\CampaignQuery;
-use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
-use app\lib\yandex\direct\resources\AdGroupResource;
-use app\lib\yandex\direct\resources\AdResource;
-use app\lib\yandex\direct\resources\CampaignResource;
-use app\lib\yandex\direct\resources\KeywordsResource;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\resources\AdGroupResource;
+use app\lib\api\yandex\direct\resources\AdResource;
+use app\lib\api\yandex\direct\resources\CampaignResource;
+use app\lib\api\yandex\direct\resources\KeywordsResource;
 use app\models\Product;
 use app\models\Shop;
-use app\models\YandexCampaign;
 use app\models\YandexOauth;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;

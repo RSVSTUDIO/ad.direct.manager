@@ -6,11 +6,11 @@
  * Time: 21:55
  */
 
-namespace app\lib\yandex\direct\query;
+namespace app\lib\api\yandex\direct\query;
 
-use app\lib\yandex\direct\query\selectionCriteria\LimitOffset;
-use app\lib\yandex\direct\query\selectionCriteria\Criteria;
-use app\lib\yandex\direct\query\selectionCriteria\CriteriaInterface;
+use app\lib\api\yandex\direct\query\selectionCriteria\LimitOffset;
+use app\lib\api\yandex\direct\query\selectionCriteria\Criteria;
+use app\lib\api\yandex\direct\query\selectionCriteria\CriteriaInterface;
 use yii\base\Object;
 use yii\gii\generators\extension\CriteriaException;
 

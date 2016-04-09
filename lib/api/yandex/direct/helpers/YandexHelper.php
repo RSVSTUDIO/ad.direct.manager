@@ -6,7 +6,7 @@
  * Time: 10:49
  */
 
-namespace app\lib\yandex\direct\helpers;
+namespace app\lib\api\yandex\direct\helpers;
 
 use yii\helpers\ArrayHelper;
 

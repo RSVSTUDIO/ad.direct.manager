@@ -6,15 +6,15 @@
  * Time: 21:48
  */
 
-namespace app\lib\yandex\direct\query;
+namespace app\lib\api\yandex\direct\query;
 
-use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
-use app\lib\yandex\direct\query\selectionCriteria\Criteria;
+use app\lib\api\yandex\direct\query\selectionCriteria\CampaignCriteria;
+use app\lib\api\yandex\direct\query\selectionCriteria\Criteria;
 
 /**
  * Класс для формирования запроса на получение кампаний
  * Class CampaignQuery
- * @package app\lib\yandex\direct\query
+ * @package app\lib\api\yandex\direct\query
  *
  * @property CampaignCriteria $selectionCriteria
  */

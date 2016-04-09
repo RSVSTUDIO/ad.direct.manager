@@ -6,9 +6,9 @@
  * Time: 14:14
  */
 
-namespace app\lib\yandex\direct\entity\campaign;
+namespace app\lib\api\yandex\direct\entity\campaign;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
 class TimeTargeting extends BaseEntity
@@ -24,7 +24,7 @@ class TimeTargeting extends BaseEntity
     public $considerWorkingWeekends;
 
     /**
-     * @var \app\lib\yandex\direct\entity\campaign\TimeTargetingOnPublicHolidays
+     * @var \app\lib\api\yandex\direct\entity\campaign\TimeTargetingOnPublicHolidays
      */
     public $holidaySchedule;
 }

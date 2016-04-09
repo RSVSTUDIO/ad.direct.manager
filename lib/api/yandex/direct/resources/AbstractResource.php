@@ -6,14 +6,14 @@
  * Time: 19:04
  */
 
-namespace app\lib\yandex\direct\resources;
+namespace app\lib\api\yandex\direct\resources;
 
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\entity\Campaign;
-use app\lib\yandex\direct\query\AbstractQuery;
-use app\lib\yandex\direct\query\ChangeResult;
-use app\lib\yandex\direct\query\Result;
-use app\lib\yandex\direct\system\AnnotationParser;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\entity\Campaign;
+use app\lib\api\yandex\direct\query\AbstractQuery;
+use app\lib\api\yandex\direct\query\ChangeResult;
+use app\lib\api\yandex\direct\query\Result;
+use app\lib\api\yandex\direct\system\AnnotationParser;
 use yii\helpers\ArrayHelper;
 
 abstract class AbstractResource
@@ -66,7 +66,7 @@ abstract class AbstractResource
      *
      * @param AbstractQuery|array $query
      * @return Result
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function find($query)
     {
@@ -83,7 +83,7 @@ abstract class AbstractResource
      * Добавление новых ресурсов
      * @param array|array[] $params
      * @return ChangeResult
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function add($params)
     {
@@ -104,7 +104,7 @@ abstract class AbstractResource
      *
      * @param $item
      * @return ChangeResult
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function update($item)
     {
@@ -137,7 +137,7 @@ abstract class AbstractResource
      *
      * @param int|int[] $ids
      * @return ChangeResult
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function delete($ids)
     {
@@ -154,7 +154,7 @@ abstract class AbstractResource
      * @param array $params
      * @param string $method
      * @return mixed
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     protected function query(array $params = [], $method = 'get')
     {

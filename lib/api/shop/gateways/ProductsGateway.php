@@ -6,9 +6,9 @@
  * Time: 20:36
  */
 
-namespace app\components\api\shop\gateways;
+namespace app\lib\api\shop\gateways;
 
-use app\components\api\shop\query\QueryInterface;
+use app\lib\api\shop\query\QueryInterface;
 
 class ProductsGateway extends AbstractGateway
 {

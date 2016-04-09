@@ -6,9 +6,9 @@
  * Time: 15:50
  */
 
-namespace app\lib\yandex\direct\entity\ad;
+namespace app\lib\api\yandex\direct\entity\ad;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 
 class TextAdGet extends BaseEntity
 {

@@ -6,14 +6,14 @@
  * Time: 19:04
  */
 
-namespace app\lib\yandex\direct\mappers;
+namespace app\lib\api\yandex\direct\mappers;
 
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\entity\Campaign;
-use app\lib\yandex\direct\query\AbstractQuery;
-use app\lib\yandex\direct\query\ChangeResult;
-use app\lib\yandex\direct\query\Result;
-use app\lib\yandex\direct\system\AnnotationParser;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\entity\Campaign;
+use app\lib\api\yandex\direct\query\AbstractQuery;
+use app\lib\api\yandex\direct\query\ChangeResult;
+use app\lib\api\yandex\direct\query\Result;
+use app\lib\api\yandex\direct\system\AnnotationParser;
 
 abstract class Mapper
 {
@@ -75,7 +75,7 @@ abstract class Mapper
      *
      * @param AbstractQuery|array $query
      * @return Result
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function find($query)
     {
@@ -98,7 +98,7 @@ abstract class Mapper
      *
      * @param $params
      * @return mixed
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function update($params)
     {
@@ -115,7 +115,7 @@ abstract class Mapper
      *
      * @param $params
      * @return mixed
-     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
     public function updateAll($params)
     {

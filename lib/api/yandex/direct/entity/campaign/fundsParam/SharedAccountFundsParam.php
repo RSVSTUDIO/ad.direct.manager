@@ -6,9 +6,9 @@
  * Time: 17:42
  */
 
-namespace app\lib\yandex\direct\entity\campaign\fundsParam;
+namespace app\lib\api\yandex\direct\entity\campaign\fundsParam;
 
-use app\lib\yandex\direct\entity\BaseEntity;
+use app\lib\api\yandex\direct\entity\BaseEntity;
 use yii\base\Object;
 
 class SharedAccountFundsParam extends BaseEntity

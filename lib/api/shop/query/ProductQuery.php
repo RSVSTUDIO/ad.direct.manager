@@ -6,7 +6,7 @@
  * Time: 22:09
  */
 
-namespace app\components\api\shop\query;
+namespace app\lib\api\shop\query;
 
 
 class ProductQuery extends BaseQuery

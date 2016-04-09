@@ -6,7 +6,7 @@
  * Time: 15:40
  */
 
-namespace app\lib\yandex\direct\entity;
+namespace app\lib\api\yandex\direct\entity;
 
 class AdGroup extends BaseEntity
 {
