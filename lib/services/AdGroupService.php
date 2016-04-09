@@ -11,15 +11,18 @@ namespace app\lib\services;
 use app\lib\api\yandex\direct\exceptions\YandexException;
 use app\lib\api\yandex\direct\resources\AdGroupResource;
 use app\models\Product;
-use app\models\YandexCampaign;
 
-class AdGroupService
+class AdGroupService extends YandexService
 {
     /**
      * @var AdGroupResource
      */
     protected $adGroupResource;
-    
+
+    /**
+     * AdGroupService constructor.
+     * @param AdGroupResource $resource
+     */
     public function __construct(AdGroupResource $resource)
     {
         $this->adGroupResource = $resource;
@@ -41,13 +44,7 @@ class AdGroupService
         $result = $this->adGroupResource->add($data);
         
         if (!$result->isSuccess()) {
-            $errorInfo = $result->firstError();
-            $errorMsg = $errorInfo['Message'];
-            if (!empty($errorInfo['Details'])) {
-                $errorMsg .= ': ' . $errorInfo['Details'];
-            }
-
-            throw new YandexException($errorMsg, $errorInfo['Code']);
+            $this->throwExceptionFromResult($result);
         }
         
         $product->yandex_adgroup_id = $result->getIds()[0]; 

@@ -13,7 +13,7 @@ use app\lib\api\yandex\direct\resources\CampaignResource;
 use app\models\Settings;
 use app\models\YandexCampaign;
 
-class YandexCampaignService
+class YandexCampaignService extends YandexService
 {
     const MIN_DAILY_BUDGET = 301;
 
@@ -54,13 +54,7 @@ class YandexCampaignService
         $result = $this->campaignResource->add($this->getCampaignData($name));
 
         if (!$result->isSuccess()) {
-            $errorInfo = $result->firstError();
-            $errorMsg = $errorInfo['Message'];
-            if (!empty($errorInfo['Details'])) {
-                $errorMsg .= ': ' . $errorInfo['Details'];
-            }
-
-            throw new YandexException($errorMsg, $errorInfo['Code']);
+            $this->throwExceptionFromResult($result);
         }
 
         $campaignId = $result->getIds()[0];

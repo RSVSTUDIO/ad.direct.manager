@@ -14,7 +14,7 @@ use app\lib\api\yandex\direct\resources\AdResource;
 use app\models\Product;
 use app\models\Template;
 
-class AdService
+class AdService extends YandexService
 {
     const MAX_TITLE_LENGTH = 33;
 
@@ -47,7 +47,7 @@ class AdService
         $data = [
             'TextAd' => [
                 'Href' => $apiProduct->href,
-                'AdImageHash' => $apiProduct->image,
+               // 'AdImageHash' => $apiProduct->image,
                 'Mobile' => 'NO'
             ],
             'AdGroupId' => $product->yandex_adgroup_id
@@ -58,13 +58,7 @@ class AdService
         $result = $this->adResource->add($data);
 
         if (!$result->isSuccess()) {
-            $errorInfo = $result->firstError();
-            $errorMsg = $errorInfo['Message'];
-            if (!empty($errorInfo['Details'])) {
-                $errorMsg .= ': ' . $errorInfo['Details'];
-            }
-
-            throw new YandexException($errorMsg, $errorInfo['Code']);
+            $this->throwExceptionFromResult($result);
         }
 
         return $result->getIds()[0];

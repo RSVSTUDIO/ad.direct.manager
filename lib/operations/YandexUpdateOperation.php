@@ -175,9 +175,8 @@ class YandexUpdateOperation implements OperationInterface
                 } catch (YandexException $e) {
                     $productUpdateLog->status = YandexUpdateLog::STATUS_ERROR;
                     $productUpdateLog->message = $e->getMessage();
+                    $productUpdateLog->save();
                 }
-
-                $productUpdateLog->save();
             }
         }
     }
@@ -186,32 +185,35 @@ class YandexUpdateOperation implements OperationInterface
      * @param Product $product
      * @param ApiProduct $apiProduct
      * @param YandexCampaign $yaCampaign
-     * @param YandexUpdateLog $log
+     * @param YandexUpdateLog $updateLog
      * @throws YandexException
      */
     protected function processProductUpdate(
         Product $product,
         ApiProduct $apiProduct,
         YandexCampaign $yaCampaign,
-        YandexUpdateLog $log
+        YandexUpdateLog $updateLog
     ) {
         if (empty($product->yandex_ad_id) && $product->is_available) {
-            $log->operation = YandexUpdateLog::OPERATION_CREATE;
+            $updateLog->operation = YandexUpdateLog::OPERATION_CREATE;
             $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
             $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
             $yaCampaign->incrementProductsCount();
             $this->keywordsService->createKeywordsFor($product);
             $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
+            $updateLog->save();
         } elseif (!$apiProduct->isAvailable) {
-            $log->operation = YandexUpdateLog::OPERATION_REMOVE;
+            $updateLog->operation = YandexUpdateLog::OPERATION_REMOVE;
             $product->is_available = $apiProduct->isAvailable;
             $this->adService->removeAd($product);
             $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+            $updateLog->save();
         } elseif ($product->price != $apiProduct->price) {
-            $log->operation = YandexUpdateLog::OPERATION_UPDATE;
+            $updateLog->operation = YandexUpdateLog::OPERATION_UPDATE;
             $product->price = $apiProduct->price;
             $this->adService->update($product, $apiProduct);
             $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
+            $updateLog->save();
         }
 
         $product->save();

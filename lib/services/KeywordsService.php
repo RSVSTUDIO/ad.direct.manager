@@ -11,7 +11,7 @@ namespace app\lib\services;
 use app\lib\api\yandex\direct\resources\KeywordsResource;
 use app\models\Product;
 
-class KeywordsService
+class KeywordsService extends YandexService
 {
     /**
      * @var KeywordsResource
