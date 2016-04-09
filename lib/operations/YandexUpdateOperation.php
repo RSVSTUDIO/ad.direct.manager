@@ -195,28 +195,73 @@ class YandexUpdateOperation implements OperationInterface
         YandexUpdateLog $updateLog
     ) {
         if (empty($product->yandex_ad_id) && $product->is_available) {
-            $updateLog->operation = YandexUpdateLog::OPERATION_CREATE;
-            $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
-            $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
-            $yaCampaign->incrementProductsCount();
-            $this->keywordsService->createKeywordsFor($product);
-            $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
-            $updateLog->save();
+            $this->createAdProduct($product, $apiProduct, $yaCampaign, $updateLog);
         } elseif (!$apiProduct->isAvailable) {
-            $updateLog->operation = YandexUpdateLog::OPERATION_REMOVE;
-            $product->is_available = $apiProduct->isAvailable;
-            $this->adService->removeAd($product);
-            $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
-            $updateLog->save();
+            $this->removeAdProduct($product, $updateLog);
         } elseif ($product->price != $apiProduct->price) {
-            $updateLog->operation = YandexUpdateLog::OPERATION_UPDATE;
-            $product->price = $apiProduct->price;
-            $this->adService->update($product, $apiProduct);
-            $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
-            $updateLog->save();
+            $this->updateAdProduct($product, $apiProduct, $updateLog);
         }
 
         $product->save();
+    }
+
+    /**
+     * Снятие объявления
+     *
+     * @param Product $product
+     * @param ApiProduct $apiProduct
+     * @param YandexUpdateLog $updateLog
+     * @throws YandexException
+     */
+    protected function updateAdProduct(
+        Product $product,
+        ApiProduct $apiProduct,
+        YandexUpdateLog $updateLog
+    ) {
+        $updateLog->operation = YandexUpdateLog::OPERATION_UPDATE;
+        $product->price = $apiProduct->price;
+        $this->adService->update($product, $apiProduct);
+        $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
+        $updateLog->save();
+    }
+
+    /**
+     * Обновление объявления
+     *
+     * @param Product $product
+     * @param YandexUpdateLog $updateLog
+     */
+    protected function removeAdProduct(Product $product, YandexUpdateLog $updateLog)
+    {
+        $updateLog->operation = YandexUpdateLog::OPERATION_REMOVE;
+        $product->is_available = false;
+        $this->adService->removeAd($product);
+        $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+        $updateLog->save();
+    }
+
+    /**
+     * Создание нового объявления
+     *
+     * @param Product $product
+     * @param ApiProduct $apiProduct
+     * @param YandexCampaign $yaCampaign
+     * @param YandexUpdateLog $updateLog
+     * @throws YandexException
+     */
+    protected function createAdProduct(
+        Product $product,
+        ApiProduct $apiProduct,
+        YandexCampaign $yaCampaign,
+        YandexUpdateLog $updateLog
+    ) {
+        $updateLog->operation = YandexUpdateLog::OPERATION_CREATE;
+        $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
+        $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
+        $yaCampaign->incrementProductsCount();
+        $this->keywordsService->createKeywordsFor($product);
+        $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
+        $updateLog->save();
     }
 
     /**
