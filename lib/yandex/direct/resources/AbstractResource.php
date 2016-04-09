@@ -100,37 +100,65 @@ abstract class AbstractResource
     }
 
     /**
-     * Обновление записи
+     * Обновление записи/записей
      *
-     * @param $params
-     * @return mixed
+     * @param $item
+     * @return ChangeResult
      * @throws \app\lib\yandex\direct\exceptions\ConnectionException
      */
-    public function update($params)
+    public function update($item)
     {
         $resourceName = ucfirst($this->resourceName);
-        $data = [$resourceName => [$params]];
 
-        $result = $this->connection->query($this->resourceName, $data, 'update');
+        $items = ArrayHelper::isAssociative($item) ? [$item] : $item;
 
-        return new ChangeResult($result[$resourceName]);
+        $result = $this->connection->query($this->resourceName, [$resourceName => $items], 'update');
+
+        return new ChangeResult($result['result']['UpdateResults']);
     }
 
     /**
-     * Обновление нескольких записей
+     * Архивация записи
      *
-     * @param $params
+     * @param int|int[] $ids
+     * @return ChangeResult
+     */
+    public function archive($ids)
+    {
+        $ids = (array)$ids;
+
+        $result = $this->query(['SelectionCriteria' => $ids], 'archive');
+
+        return new ChangeResult($result['result']['ArchiveResults']);
+    }
+
+    /**
+     * Удаление записи/записей
+     *
+     * @param int|int[] $ids
+     * @return ChangeResult
+     * @throws \app\lib\yandex\direct\exceptions\ConnectionException
+     */
+    public function delete($ids)
+    {
+        $ids = (array)$ids;
+
+        $result = $this->connection->query($this->resourceName, ['SelectionCriteria' => $ids], 'delete');
+
+        return new ChangeResult($result['result']['DeleteResults']);
+    }
+
+    /**
+     * Выполнение запроса к api
+     *
+     * @param array $params
+     * @param string $method
      * @return mixed
      * @throws \app\lib\yandex\direct\exceptions\ConnectionException
      */
-    public function updateAll($params)
+    protected function query(array $params = [], $method = 'get')
     {
-        $resourceName = ucfirst($this->resourceName);
-        $data = [$resourceName => $params];
-
-        $result = $this->connection->query($this->resourceName, $data, 'update');
-
-        return new ChangeResult($result[$resourceName]);
+        return $this->connection->query($this->resourceName, $params, $method);
     }
 
     /**

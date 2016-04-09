@@ -18,6 +18,8 @@ use Yii;
  */
 class YandexCampaign extends \yii\db\ActiveRecord
 {
+    const MAX_CAMPAIGN_PRODUCTS = 999;
+
     /**
      * @inheritdoc
      */
@@ -64,13 +66,20 @@ class YandexCampaign extends \yii\db\ActiveRecord
     /**
      * Обновление количества товаров в кампании
      *
-     * @param $shopId
-     * @param $brandId
      * @return int
      */
-    public static function incrementProductsCount($shopId, $brandId)
+    public function incrementProductsCount()
     {
-        return self::updateAllCounters(['products_count' => 1], ['shop_id' => $shopId, 'brand_id' => $brandId]);
+        return self::updateAllCounters(['products_count' => 1], ['id' => $this->id]);
+    }
+
+    /**
+     * Уменьшить счетчик кол-ва товаров в кампании
+     * @return int
+     */
+    public function decrementProductsCount()
+    {
+        return self::updateAllCounters(['products_count' => -1], ['id' => $this->id]);
     }
 
     /**
@@ -84,7 +93,7 @@ class YandexCampaign extends \yii\db\ActiveRecord
                 'shop_id' => $shopId,
                 'brand_id' => $brandId
             ])
-            ->orderBy(['id' => SORT_DESC])
+            ->andWhere('products_count < ' . self::MAX_CAMPAIGN_PRODUCTS)
             ->one();
     }
 }

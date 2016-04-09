@@ -10,7 +10,9 @@ namespace app\commands;
 
 use app\components\api\shop\gateways\ProductsGateway;
 use app\components\api\shop\query\ProductQuery;
-use app\lib\services\AdditionalInfoLoaderService;
+use app\lib\services\AdGroupService;
+use app\lib\services\AdService;
+use app\lib\services\ShopProductService;
 use app\lib\services\YandexCampaignService;
 use app\lib\yandex\direct\Connection;
 use app\lib\yandex\direct\query\AdGroupQuery;
@@ -22,6 +24,7 @@ use app\lib\yandex\direct\resources\CampaignResource;
 use app\lib\yandex\direct\resources\KeywordsResource;
 use app\models\Product;
 use app\models\Shop;
+use app\models\YandexCampaign;
 use app\models\YandexOauth;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -45,113 +48,66 @@ class YandexDirectController extends Controller
         $adResource = new AdResource($yaConnection);
         $keywordsResource = new KeywordsResource($yaConnection);
 
+        $adGroupService = new AdGroupService($adGroupResource);
+        $adService = new AdService($adResource);
+
         $yandexCampaignService = new YandexCampaignService($campaignResource);
 
-        $additionalInfoLoader = new AdditionalInfoLoaderService($productsGateway);
+        $shopProductService = new ShopProductService($productsGateway);
 
-        $productQuery = Product::find()->andWhere(['shop_id' => $shop->id])->asArray();
+        $productQuery = Product::find()->andWhere(['shop_id' => $shop->id])->orderBy('id');
 
+        $statistics = [
+            'errors' => [],
+            'updated' => [],
+            'deleted' => [],
+            'created' => []
+        ];
+
+        /** @var Product[] $products */
         foreach ($productQuery->batch() as $products) {
-            $products = $additionalInfoLoader->load($products);
+            $productIds = ArrayHelper::getColumn($products, 'product_id');
+            $apiProducts = $shopProductService->findByIds($productIds);
             foreach ($products as $product) {
-                if (empty($product['api_data'])) {
+                if (empty($apiProducts[$product->product_id])) {
+                    $statistics['errors'][] = [
+                        'id' => $product->product_id,
+                        'message' => 'Not loaded from api'
+                    ];
                     continue;
                 }
-                $brand = $product['api_data']['brand'];
-                $yaCampaign = $yandexCampaignService->getCampaign($shop->id, $brand['id']);
-                if (!$yaCampaign || $yaCampaign->products_count >= 999) {
-                    $yaCampaign = $yandexCampaignService->createCampaign($brand['title'], $shop->id, $brand['id']);
+                //описание товара полученное через api
+                $apiProduct = $apiProducts[$product->product_id];
+
+                $yaCampaign = $yandexCampaignService->getCampaign($shop->id, $apiProduct->getBrandId());
+                if (!$yaCampaign) {
+                    $yaCampaign = $yandexCampaignService->createCampaign($apiProduct->getBrandTitle(), $shop->id,
+                        $apiProduct->getBrandId());
+                    $product->yandex_campaign_id = $yaCampaign->id;
+                }
+
+                if (empty($product->yandex_ad_id)) {
+                    $product->yandex_adgroup_id = $adGroupService->createAdGroup($product);
+                    $product->yandex_ad_id = $adService->createAd($product, $apiProduct);
+                    $product->save();
+                    $statistics['created'][] = $product->id;
+                    $yaCampaign->incrementProductsCount();
+                } elseif ($data['operation'] == 'updatePrice' && $product->price != $apiProduct->price) {
+                    $product->price = $apiProduct->price;
+                    $product->save();
+                    $adService->update($product, $apiProduct);
+                    $statistics['updated'][] = $product->id;
+                } elseif ($data['operation'] == 'updateAvailability' && !$apiProduct->isAvailable) {
+                    $product->is_available = $apiProduct->isAvailable;
+                    $product->save();
+                    $adService->deleteAd($product);
+                    $statistics['deleted'] = $product->id;
                 }
             }
         }
-die;
-
-        $yaConnection = new Connection(YandexOauth::getTokenFor($shop->id, $data['context']['userId']));
-        $adsResource = new AdResource($yaConnection);
-
-        $productsGateway = new ProductsGateway($shop->product_api_url, $shop->api_secret_key);
-        $productsQuery = new ProductQuery();
-
-        $page = 1;
-        $productsQuery->limit(self::LIMIT_PER_ITERATION);
-
-        $campaign = $this->getCampaignOrCreate($yaConnection);
-        $adGroup = $this->getAdGroupOrCreate($yaConnection, $campaign['Id']);
-        
-        while (true) {
-            $products = $productsGateway->findByQuery($productsQuery);
-
-            if (empty($products)) {
-                break;
-            }
-
-            foreach ($products as $product) {
-                $ad = $this->getAdParams($product);
-                $ad['AdGroupId'] = $adGroup['Id'];
-                $res = $adsResource->add($ad);
-                print_r($ad);
-                print_r($res);die;
-            }
-
-            $page++;
-            $productsQuery->setPage($page);
-        }
-
-        $productsGateway->totalCount($productsQuery);
+        die;
     }
 
-    protected function loadAdditionalInfoFromApi(array $products, ProductsGateway $productsGateway)
-    {
-        $productIds = ArrayHelper::getColumn($products, 'product_id');
-        $apiProducts = ArrayHelper::index($productsGateway->findByIds($productIds), 'id');
-
-        foreach ($products as $key => $product) {
-            $productId = $product['product_id'];
-            $additional = [
-                'vendor' => ArrayHelper::getValue($apiProducts, '')
-            ];
-        }
-    }
-    
-    protected function getAdGroupOrCreate($connection, $campaignId)
-    {
-        $agGroupResource = new AdGroupResource($connection);
-        $query = new AdGroupQuery();
-        $query->selectionCriteria->campaignIds = [$campaignId];
-
-        $result = $agGroupResource->find($query);
-        if (!$result->count()) {
-            $agGroupResource->add([
-                'Name'
-            ]);
-        } else {
-            return $result->first();
-        }
-    }
-
-    protected function getCampaignOrCreate(Connection $connection)
-    {
-        $campaignResource = new CampaignResource($connection);
-        $query = new CampaignQuery();
-        $query->selectionCriteria->setTypes(CampaignCriteria::TYPE_TEXT_CAMPAIGN);
-
-        $result = $campaignResource->find($query);
-
-        return $result->first();
-    }
-    
-    protected function getAdParams($product)
-    {
-        return [
-            'TextAd' => [
-                'Text' => 'Продам ' . $product['title'],
-                'Title' => $product['title'],
-                'Mobile' => 'NO',
-                'Href' => 'http://paramount-shop.ru/q-acoustics-7000wb.html'
-               // 'AdImageHash' => 'http://paramount-shop.ru/uploads/items/b-2456e36969a4a9fb25bf069816637355.jpg'
-            ]
-        ];
-    }
 
     protected function getStub()
     {

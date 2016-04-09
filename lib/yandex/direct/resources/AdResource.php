@@ -8,9 +8,44 @@
 
 namespace app\lib\yandex\direct\resources;
 
+use app\lib\yandex\direct\query\ChangeResult;
+
 class AdResource extends AbstractResource
 {
     public $resourceName = 'Ads';
     
     public $queryClass = 'app\lib\yandex\direct\query\AdQuery';
+
+    /**
+     * Остановка показа объявлений
+     *
+     * @param int|int[] $ids
+     * @return ChangeResult
+     */
+    public function suspend($ids)
+    {
+        $ids = (array) $ids;
+
+        $result = $this->query(['SelectionCriteria' => $ids], 'archive');
+
+        return new ChangeResult($result['result']['SuspendResults']);
+    }
+
+    /**
+     * Убрать объвление с показа
+     *
+     * @param int|int[] $ids
+     * @return bool
+     */
+    public function removeAd($ids)
+    {
+        $res = $this->suspend($ids);
+        if (!$res->isSuccess()) {
+            return false;
+        }
+
+        $res = $this->archive($ids);
+
+        return $res->isSuccess();
+    }
 }

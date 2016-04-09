@@ -45,7 +45,7 @@ class YandexCampaignService
      * Создает новую кампанию
      *
      * @param string $name название кампании
-     * @return int
+     * @return YandexCampaign
      * @throws YandexException
      */
     public function createCampaign($name, $shopId, $brandId)
