@@ -23,7 +23,7 @@ use app\models\Product;
 use app\models\Shop;
 use yii\helpers\ArrayHelper;
 
-class YandexUpdateOperation
+class YandexUpdateOperation implements OperationInterface
 {
     /**
      * @var Shop
@@ -117,7 +117,7 @@ class YandexUpdateOperation
         return $result;
     }
 
-    public function execute($operation)
+    public function execute($operation = [])
     {
         $productQuery = Product::find()->andWhere(['shop_id' => $this->shop->id])->orderBy('id');
 
@@ -137,15 +137,20 @@ class YandexUpdateOperation
                 //описание товара полученное через api
                 $apiProduct = $apiProducts[$product->product_id];
 
-                $yaCampaign = $this->campaignService->getCampaign($this->shop->id, $apiProduct->getBrandId());
-                if (!$yaCampaign) {
-                    $yaCampaign = $this->campaignService->createCampaign(
-                        $apiProduct->getBrandTitle(), $this->shop->id, $apiProduct->getBrandId()
-                    );
+                if (!$product->yandex_campaign_id) {
+                    $yaCampaign = $this->campaignService->getCampaign($this->shop->id, $apiProduct->getBrandId());
+                    if (!$yaCampaign) {
+                        $yaCampaign = $this->campaignService->createCampaign(
+                            $apiProduct->getBrandTitle(), $this->shop->id, $apiProduct->getBrandId()
+                        );
+                    }
                     $product->yandex_campaign_id = $yaCampaign->id;
+                    $product->save();
+                } else {
+                    $yaCampaign = $product->yandexCampaign;
                 }
 
-                if (empty($product->yandex_ad_id)) {
+                if (empty($product->yandex_ad_id) && $product->is_available) {
                     $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
                     $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
                     $product->save();
@@ -153,16 +158,18 @@ class YandexUpdateOperation
                     $yaCampaign->incrementProductsCount();
                 } elseif ($operation == 'updatePrice' && $product->price != $apiProduct->price) {
                     $product->price = $apiProduct->price;
-                    $product->save();
                     $this->adService->update($product, $apiProduct);
+                    $product->save();
                     $this->statistics['updated'][] = ['id' => $product->id];
                 } elseif ($operation == 'updateAvailability' && !$apiProduct->isAvailable) {
                     $product->is_available = $apiProduct->isAvailable;
                     $product->save();
-                    $this->adService->deleteAd($product);
+                    $this->adService->removeAd($product);
                     $this->statistics['deleted'] = ['id' => $product->id];
                 }
             }
         }
+
+        print_r($this->statistics);
     }
 }

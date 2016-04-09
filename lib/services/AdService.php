@@ -89,9 +89,7 @@ class AdService
             'Id' => $product->yandex_ad_id,
             'TextAd' => [
                 //'AdImageHash' => $apiProduct->image,
-                'Mobile' => 'NO'
-            ],
-            'AdGroupId' => $product->yandex_adgroup_id
+            ]
         ];
 
         $data['TextAd'] = array_merge($data['TextAd'], $textAdData);
@@ -141,7 +139,7 @@ class AdService
      * @param Product $product
      * @return bool
      */
-    public function deleteAd(Product $product)
+    public function removeAd(Product $product)
     {
         return $this->adResource->removeAd($product->yandex_ad_id);
     }

@@ -8,7 +8,7 @@
 
 namespace app\controllers\generator;
 
-use app\components\api\shop\gateways\BrandsGateway;
+use app\lib\api\shop\gateways\BrandsGateway;
 use app\controllers\SiteController;
 use app\models\Product;
 use app\models\search\ProductsApiSearch;

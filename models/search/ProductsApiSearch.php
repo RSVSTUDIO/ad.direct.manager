@@ -8,8 +8,8 @@
 
 namespace app\models\search;
 
-use app\components\api\shop\gateways\ProductsGateway;
-use app\components\api\shop\query\ProductQuery;
+use app\lib\api\shop\gateways\ProductsGateway;
+use app\lib\api\shop\query\ProductQuery;
 use app\lib\provider\ProductsApiDataProvider;
 use app\models\Shop;
 use yii\base\InvalidParamException;

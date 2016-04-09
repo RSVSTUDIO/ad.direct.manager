@@ -8,8 +8,8 @@
 
 namespace app\lib\provider;
 
-use app\components\api\shop\gateways\AbstractGateway;
-use app\components\api\shop\query\BaseQuery;
+use app\lib\api\shop\gateways\AbstractGateway;
+use app\lib\api\shop\query\BaseQuery;
 use yii\base\InvalidParamException;
 use yii\data\BaseDataProvider;
 

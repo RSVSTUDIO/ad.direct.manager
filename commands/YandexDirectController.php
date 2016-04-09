@@ -8,11 +8,14 @@
 
 namespace app\commands;
 
+use app\lib\operations\OperationInterface;
 use app\lib\operations\YandexUpdateOperation;
 use app\lib\api\yandex\direct\Connection;
 use app\models\Shop;
 use app\models\YandexOauth;
+use yii\base\Exception;
 use yii\console\Controller;
+use yii\helpers\Inflector;
 
 class YandexDirectController extends Controller
 {
@@ -31,6 +34,22 @@ class YandexDirectController extends Controller
         $yandexUpdateOperation->execute('updatePrice');
     }
 
+    /**
+     * @param string $operation
+     * @return OperationInterface
+     * @throws Exception
+     */
+    protected function createOperation($operation)
+    {
+        $operation = Inflector::camelize($operation);
+        $operationClass = 'app\lib\operations\\' . $operation;
+
+        if (!class_exists($operationClass)) {
+            throw new Exception("Operation - '$operation' not found.");
+        }
+
+        return new $operationClass;
+    }
 
     protected function getStub()
     {
