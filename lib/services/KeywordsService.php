@@ -27,10 +27,24 @@ class KeywordsService
         $this->resource = $resource;
     }
 
+    /**
+     * @param Product $product
+     * @return null
+     */
     public function createKeywordsFor(Product $product)
     {
-        $data = [
-            'Keyword'
-        ];
+        if (!$product->keywords) {
+            return null;
+        }
+
+        $keywords = array_map('trim', explode(',', $product->keywords));
+
+        foreach ($keywords as $keyword) {
+            $data = [
+                'Keyword' => $keyword,
+                'AdGroupId' => $product->yandex_adgroup_id
+            ];
+            $this->resource->add($data);
+        }
     }
 }

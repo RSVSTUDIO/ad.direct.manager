@@ -33,7 +33,7 @@ class AdService
     /**
      * @param Product $product
      * @param ApiProduct $apiProduct
-     * @return \app\lib\yandex\direct\query\ChangeResult
+     * @return int
      * @throws YandexException
      */
     public function createAd(Product $product, ApiProduct $apiProduct)

@@ -22,6 +22,9 @@ $config = [
                 ],
             ],
         ],
+        'logger' => [
+            'class' => 'app\components\ConsoleLogger'
+        ],
         'db' => $db,
     ],
     'params' => $params,
