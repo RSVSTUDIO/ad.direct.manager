@@ -13,6 +13,7 @@ use app\components\LoggerInterface;
 use app\lib\api\shop\gateways\ProductsGateway;
 use app\lib\api\shop\models\ApiProduct;
 use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\exceptions\YandexException;
 use app\lib\api\yandex\direct\resources\AdGroupResource;
 use app\lib\api\yandex\direct\resources\AdResource;
 use app\lib\api\yandex\direct\resources\CampaignResource;
@@ -23,6 +24,8 @@ use app\lib\services\KeywordsService;
 use app\lib\services\YandexCampaignService;
 use app\models\Product;
 use app\models\Shop;
+use app\models\YandexCampaign;
+use app\models\YandexUpdateLog;
 use yii\helpers\ArrayHelper;
 
 class YandexUpdateOperation implements OperationInterface
@@ -127,7 +130,9 @@ class YandexUpdateOperation implements OperationInterface
 
     public function execute($context = [])
     {
-        $productQuery = Product::find()->andWhere(['shop_id' => $this->shop->id])->orderBy('id');
+        $productQuery = Product::find()
+            ->andWhere(['shop_id' => $this->shop->id])
+            ->orderBy('id');
 
         /** @var Product[] $products */
         foreach ($productQuery->batch() as $products) {
@@ -149,10 +154,7 @@ class YandexUpdateOperation implements OperationInterface
                 if (!$product->yandex_campaign_id) {
                     $yaCampaign = $this->campaignService->getCampaign($this->shop->id, $apiProduct->getBrandId());
                     if (!$yaCampaign) {
-                        $yaCampaign = $this->campaignService->createCampaign(
-                            $apiProduct->getBrandTitle(), $this->shop->id, $apiProduct->getBrandId()
-                        );
-                        $this->logger->log('Create campaign, campaign id - ' . $yaCampaign->id);
+                        $yaCampaign = $this->createCampaign($apiProduct);
                     }
                     $product->yandex_campaign_id = $yaCampaign->id;
                     $product->save();
@@ -160,37 +162,93 @@ class YandexUpdateOperation implements OperationInterface
                     $yaCampaign = $product->yandexCampaign;
                 }
 
-                if (empty($product->yandex_ad_id) && $product->is_available) {
-                    $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
-                    $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
-                    $product->save();
-                    $this->statistics['created'][] = ['id' => $product->id];
-                    $yaCampaign->incrementProductsCount();
-                    $this->keywordsService->createKeywordsFor($product);
-                    $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
-                } elseif ($product->price != $apiProduct->price) {
-                    $product->price = $apiProduct->price;
-                    $this->adService->update($product, $apiProduct);
-                    $product->save();
-                    $this->statistics['updated'][] = ['id' => $product->id];
-                    $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
-                } elseif (!$apiProduct->isAvailable) {
-                    $product->is_available = $apiProduct->isAvailable;
-                    $product->save();
-                    $this->adService->removeAd($product);
-                    $this->statistics['deleted'] = ['id' => $product->id];
-                    $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+                $productUpdateLog = new YandexUpdateLog([
+                    'shop_id' => $this->shop->id,
+                    'task_id' => 1,
+                    'entity_type' => 'product',
+                    'entity_id' => $product->id,
+                    'status' => YandexUpdateLog::STATUS_SUCCESS
+                ]);
+
+                try {
+                    $this->processProductUpdate($product, $apiProduct, $yaCampaign, $productUpdateLog);
+                } catch (YandexException $e) {
+                    $productUpdateLog->status = YandexUpdateLog::STATUS_ERROR;
+                    $productUpdateLog->message = $e->getMessage();
                 }
+
+                $productUpdateLog->save();
             }
         }
     }
 
-    protected function removeAd(Product $product)
-    {
-        $product->is_available = 0;
+    /**
+     * @param Product $product
+     * @param ApiProduct $apiProduct
+     * @param YandexCampaign $yaCampaign
+     * @param YandexUpdateLog $log
+     * @throws YandexException
+     */
+    protected function processProductUpdate(
+        Product $product,
+        ApiProduct $apiProduct,
+        YandexCampaign $yaCampaign,
+        YandexUpdateLog $log
+    ) {
+        if (empty($product->yandex_ad_id) && $product->is_available) {
+            $log->operation = YandexUpdateLog::OPERATION_CREATE;
+            $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
+            $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
+            $yaCampaign->incrementProductsCount();
+            $this->keywordsService->createKeywordsFor($product);
+            $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
+        } elseif (!$apiProduct->isAvailable) {
+            $log->operation = YandexUpdateLog::OPERATION_REMOVE;
+            $product->is_available = $apiProduct->isAvailable;
+            $this->adService->removeAd($product);
+            $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+        } elseif ($product->price != $apiProduct->price) {
+            $log->operation = YandexUpdateLog::OPERATION_UPDATE;
+            $product->price = $apiProduct->price;
+            $this->adService->update($product, $apiProduct);
+            $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
+        }
+
         $product->save();
-        $this->adService->removeAd($product);
-        $this->statistics['deleted'] = ['id' => $product->id];
-        $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+    }
+
+    /**
+     * Создание новой кампании
+     *
+     * @param ApiProduct $apiProduct
+     * @return \app\models\YandexCampaign
+     */
+    protected function createCampaign(ApiProduct $apiProduct)
+    {
+        $campaignLog = new YandexUpdateLog([
+            'task_id' => 1,
+            'shop_id' => $this->shop->id,
+            'entity_type' => 'campaign',
+            'operation' => YandexUpdateLog::OPERATION_CREATE
+        ]);
+
+        try {
+            $yaCampaign = $this->campaignService->createCampaign(
+                $apiProduct->getBrandTitle(), $this->shop->id, $apiProduct->getBrandId()
+            );
+        } catch (YandexException $e) {
+            $campaignLog->status = YandexUpdateLog::STATUS_ERROR;
+            $campaignLog->message = $e->getMessage();
+            $campaignLog->save();
+            $this->logger->log('Fail on create campaign: ' . $e->getMessage());
+
+            throw new $e;
+        }
+
+        $this->logger->log('Create campaign, campaign id - ' . $yaCampaign->id);
+        $campaignLog->entity_id = $yaCampaign->id;
+        $campaignLog->status = YandexUpdateLog::STATUS_SUCCESS;
+
+        return $yaCampaign;
     }
 }

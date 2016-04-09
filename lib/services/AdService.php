@@ -47,7 +47,7 @@ class AdService
         $data = [
             'TextAd' => [
                 'Href' => $apiProduct->href,
-                //'AdImageHash' => $shopProduct->image,
+                'AdImageHash' => $apiProduct->image,
                 'Mobile' => 'NO'
             ],
             'AdGroupId' => $product->yandex_adgroup_id
@@ -88,7 +88,7 @@ class AdService
         $data = [
             'Id' => $product->yandex_ad_id,
             'TextAd' => [
-                //'AdImageHash' => $apiProduct->image,
+                'AdImageHash' => $apiProduct->image,
             ]
         ];
 
