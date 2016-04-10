@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\TaskQueue;
+use yii\db\ActiveQuery;
 
 /**
  * TaskQueueSearch represents the model behind the search form about `app\models\TaskQueue`.
@@ -19,7 +20,7 @@ class TaskQueueSearch extends TaskQueue
     {
         return [
             [['id', 'shop_id'], 'integer'],
-            [['created_at', 'started_at', 'status', 'operation', 'completed_at', 'context', 'error'], 'safe'],
+            [['created_at', 'started_at', 'status', 'operation', 'completed_at', 'context', 'error', 'shop.name'], 'safe'],
         ];
     }
 
@@ -31,6 +32,15 @@ class TaskQueueSearch extends TaskQueue
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes()
+    {
+        return array_merge(parent::attributes(), ['shop.name']);
+    }
+
 
     /**
      * Creates data provider instance with search query applied
@@ -49,6 +59,15 @@ class TaskQueueSearch extends TaskQueue
 
         $this->load($params);
 
+        $query->joinWith(['shop' => function (ActiveQuery $query) {
+            return $query->from(['shop' => 'shops']);
+        }]);
+
+        $dataProvider->sort->attributes['shop.name'] = [
+            'asc' => ['shop.name' => SORT_ASC],
+            'desc' => ['shop.name' => SORT_DESC]
+        ];
+
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -56,7 +75,7 @@ class TaskQueueSearch extends TaskQueue
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
+            'task_queue.id' => $this->id,
             'shop_id' => $this->shop_id,
             'created_at' => $this->created_at,
             'started_at' => $this->started_at,
@@ -66,7 +85,8 @@ class TaskQueueSearch extends TaskQueue
         $query->andFilterWhere(['like', 'status', $this->status])
             ->andFilterWhere(['like', 'operation', $this->operation])
             ->andFilterWhere(['like', 'context', $this->context])
-            ->andFilterWhere(['like', 'error', $this->error]);
+            ->andFilterWhere(['like', 'error', $this->error])
+            ->andFilterWhere(['like', 'shop.name', $this->getAttribute('shop.name')]);
 
         return $dataProvider;
     }

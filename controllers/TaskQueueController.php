@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\search\UpdateLogSearch;
 use Yii;
 use app\models\TaskQueue;
 use app\models\search\TaskQueueSearch;
@@ -12,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * TaskQueueController implements the CRUD actions for TaskQueue model.
  */
-class TaskQueueController extends Controller
+class TaskQueueController extends BaseController
 {
     public function behaviors()
     {
@@ -41,15 +42,18 @@ class TaskQueueController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single TaskQueue model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
+    
+    public function actionDetails($task_id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
+        $searchModel = new UpdateLogSearch();
+
+        $searchModel->task_id = $task_id;
+        
+        $dataProvider = $searchModel->search($this->request->queryParams);
+        
+        return $this->render('details', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
     

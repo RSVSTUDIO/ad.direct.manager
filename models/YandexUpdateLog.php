@@ -2,7 +2,9 @@
 
 namespace app\models;
 
+use app\lib\api\yandex\direct\entity\Campaign;
 use Yii;
+use yii\db\ActiveQuery;
 
 /**
  * This is the model class for table "yandex_update_log".
@@ -18,6 +20,8 @@ use Yii;
  * @property string $operation
  *
  * @property Shop $shop
+ * @property Product $product
+ * @property Campaign $campaign
  */
 class YandexUpdateLog extends \yii\db\ActiveRecord
 {
@@ -28,6 +32,9 @@ class YandexUpdateLog extends \yii\db\ActiveRecord
     const OPERATION_UPDATE = 'update';
     const OPERATION_REMOVE = 'remove';
     const OPERATION_API_LOAD = 'load_from_api';
+
+    const ENTITY_PRODUCT = 'product';
+    const ENTITY_CAMPAIGN = 'campaign';
     
     /**
      * @inheritdoc
@@ -58,13 +65,13 @@ class YandexUpdateLog extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'task_id' => 'Task ID',
-            'shop_id' => 'Shop ID',
-            'entity_type' => 'Entity Type',
-            'entity_id' => 'Entity ID',
-            'created_at' => 'Created At',
-            'status' => 'Status',
-            'message' => 'Message',
+            'task_id' => 'Задача',
+            'shop_id' => 'Магазин',
+            'entity_type' => 'Тип сущности',
+            'entity_id' => 'Сущность',
+            'created_at' => 'Дата создания',
+            'status' => 'Статус',
+            'message' => 'Сообщение',
         ];
     }
 
@@ -74,5 +81,21 @@ class YandexUpdateLog extends \yii\db\ActiveRecord
     public function getShop()
     {
         return $this->hasOne(Shop::className(), ['id' => 'shop_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getProduct()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'entity_id']);
+    }
+
+    /**
+     * @return ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(YandexCampaign::className(), ['id' => 'entity_id']);
     }
 }
