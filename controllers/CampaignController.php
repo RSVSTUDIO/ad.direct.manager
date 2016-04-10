@@ -17,7 +17,7 @@ use app\models\Shop;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 
-class CampaignController extends BaseController
+class CampaignController extends SiteController
 {
     public function actionIndex($shopId)
     {

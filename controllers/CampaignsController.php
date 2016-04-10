@@ -15,7 +15,7 @@ use yii\filters\VerbFilter;
 /**
  * CampaignsController implements the CRUD actions for YandexCampaign model.
  */
-class CampaignsController extends Controller
+class CampaignsController extends SiteController
 {
     public function behaviors()
     {

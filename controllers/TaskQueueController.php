@@ -13,7 +13,7 @@ use yii\filters\VerbFilter;
 /**
  * TaskQueueController implements the CRUD actions for TaskQueue model.
  */
-class TaskQueueController extends BaseController
+class TaskQueueController extends SiteController
 {
     public function behaviors()
     {

@@ -26,7 +26,7 @@ class AdResource extends AbstractResource
     {
         $ids = (array) $ids;
 
-        $result = $this->query(['SelectionCriteria' => $ids], 'archive');
+        $result = $this->query(['SelectionCriteria' => ['Ids' => $ids]], 'archive');
 
         return new ChangeResult($result['result']['SuspendResults']);
     }
@@ -39,7 +39,7 @@ class AdResource extends AbstractResource
      */
     public function moderate($ids)
     {
-        $result = $this->query(['SelectionCriteria' => (array) $ids], 'moderate');
+        $result = $this->query(['SelectionCriteria' => ['Ids' => (array) $ids]], 'moderate');
 
         return new ChangeResult($result['result']['ModerateResults']);
     }

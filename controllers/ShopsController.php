@@ -12,7 +12,7 @@ use yii\filters\VerbFilter;
 /**
  * ShopsController implements the CRUD actions for Shop model.
  */
-class ShopsController extends Controller
+class ShopsController extends SiteController
 {
     public function behaviors()
     {

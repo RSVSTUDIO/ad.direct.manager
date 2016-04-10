@@ -314,9 +314,11 @@ class YandexUpdateOperation extends BaseOperation
         $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
 
         try {
-            $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
-            $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
+            if (empty($product->yandex_adgroup_id)) {
+                $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
+            }
             $this->keywordsService->createKeywordsFor($product);
+            $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
             $yaCampaign->incrementProductsCount();
         } catch (YandexException $e) {
             $updateLog->status = YandexUpdateLog::STATUS_ERROR;

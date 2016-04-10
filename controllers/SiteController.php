@@ -60,15 +60,6 @@ class SiteController extends BaseController
         return $this->render('index');
     }
 
-//    public function actions()
-//    {
-//        return [
-//            'error' => [
-//                'class' => 'yii\web\ErrorAction',
-//            ],
-//        ];
-//    }
-
     /**
      * @return string
      */
