@@ -9,11 +9,7 @@
 namespace app\commands;
 
 use app\lib\operations\OperationInterface;
-use app\lib\operations\YandexUpdateOperation;
-use app\lib\api\yandex\direct\Connection;
-use app\models\Shop;
 use app\models\TaskQueue;
-use app\models\YandexOauth;
 use yii\base\ErrorException;
 use yii\base\Exception;
 use yii\console\Controller;

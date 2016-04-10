@@ -8,12 +8,12 @@
 
 namespace app\controllers;
 
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\entity\Campaign;
-use app\lib\yandex\direct\mappers\CampaignMapper;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\entity\Campaign;
+use app\lib\api\yandex\direct\mappers\CampaignMapper;
 use app\models\CampaignSearch;
 use app\models\forms\CampaignForm;
-use app\models\YandexOauth;
+use app\models\Shop;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 
@@ -55,7 +55,8 @@ class CampaignController extends BaseController
      */
     public function findModel($id, $shopId)
     {
-        $token = YandexOauth::getTokenFor($shopId);
+        $shop = Shop::findOne($shopId);
+        $token = $shop->yandex_access_token;
         $connection = new Connection($token);
         $campaignMapper = new CampaignMapper($connection);
         

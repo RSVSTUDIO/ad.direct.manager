@@ -14,6 +14,7 @@ use Yii;
  * @property string $api_secret_key
  * @property string $yandex_application_id
  * @property string $yandex_secret
+ * @property string $yandex_access_token
  *
  * @property Product[] $products
  */
@@ -35,7 +36,7 @@ class Shop extends \yii\db\ActiveRecord
         return [
             [['name', 'brand_api_url', 'product_api_url'], 'required'],
             [['brand_api_url', 'product_api_url', 'api_secret_key'], 'string'],
-            [['yandex_application_id', 'yandex_secret'], 'string'],
+            [['yandex_application_id', 'yandex_secret', 'yandex_access_token'], 'string'],
             [['name'], 'string', 'max' => 50]
         ];
     }

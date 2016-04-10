@@ -16,6 +16,8 @@ use Yii;
  * @property string $context
  * @property string $error
  * @property int $shop_id
+ *
+ * @property Shop $shop
  */
 class TaskQueue extends \yii\db\ActiveRecord
 {
@@ -157,5 +159,13 @@ class TaskQueue extends \yii\db\ActiveRecord
     public function getContext()
     {
         return json_decode($this->context, true);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShop()
+    {
+        return $this->hasOne(Shop::className(), ['id' => 'shop_id']);
     }
 }

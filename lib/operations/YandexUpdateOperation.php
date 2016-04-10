@@ -24,9 +24,7 @@ use app\lib\services\KeywordsService;
 use app\lib\services\YandexCampaignService;
 use app\models\Product;
 use app\models\Shop;
-use app\models\TaskQueue;
 use app\models\YandexCampaign;
-use app\models\YandexOauth;
 use app\models\YandexUpdateLog;
 use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
@@ -90,10 +88,8 @@ class YandexUpdateOperation extends BaseOperation
     {
         /** @var Shop $shop */
         $this->shop = Shop::findOne($this->task->shop_id);
-        
-        $context = $this->task->getContext();
 
-        $this->connection = new Connection(YandexOauth::getTokenFor($this->shop->id, $context['userId']));
+        $this->connection = new Connection($this->shop->yandex_access_token);
         
         $this->logger = new ConsoleLogger();
         $campaignResource = new CampaignResource($this->connection);

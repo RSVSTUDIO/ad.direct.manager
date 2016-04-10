@@ -8,10 +8,10 @@
 
 namespace app\models\forms;
 
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\entity\Campaign;
-use app\lib\yandex\direct\mappers\CampaignMapper;
-use app\models\YandexOauth;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\entity\Campaign;
+use app\lib\api\yandex\direct\mappers\CampaignMapper;
+use app\models\Shop;
 use yii\base\Model;
 
 class CampaignForm extends Model
@@ -54,7 +54,8 @@ class CampaignForm extends Model
     
     public function save()
     {
-        $connection = new Connection(YandexOauth::getTokenFor($this->shopId));
+        $shop = Shop::findOne($this->shopId);
+        $connection = new Connection($shop->yandex_access_token);
         $campaignMapper = new CampaignMapper($connection);
         
         $campaign = [

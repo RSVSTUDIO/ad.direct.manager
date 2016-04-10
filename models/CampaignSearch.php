@@ -8,10 +8,10 @@
 
 namespace app\models;
 
-use app\lib\yandex\direct\Connection;
-use app\lib\yandex\direct\mappers\CampaignMapper;
-use app\lib\yandex\direct\query\CampaignQuery;
-use app\lib\yandex\direct\query\selectionCriteria\CampaignCriteria;
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\mappers\CampaignMapper;
+use app\lib\api\yandex\direct\query\CampaignQuery;
+use app\lib\api\yandex\direct\query\selectionCriteria\CampaignCriteria;
 use yii\base\Model;
 use yii\data\ArrayDataProvider;
 
@@ -60,8 +60,9 @@ class CampaignSearch extends Model
         if (!$this->validate()) {
             return $provider;
         }
-
-        $token = YandexOauth::findOne(['user_id' => $this->userId, 'shop_id' => $this->shopId]);
+        
+        $shop = Shop::findOne($this->shopId);
+        $token = $shop->yandex_access_token;
         
         if (!$token) {
             return $provider;
@@ -73,7 +74,7 @@ class CampaignSearch extends Model
         }
 
         $query = new CampaignQuery($criteria);
-        $connection = new Connection($token->access_token);
+        $connection = new Connection($token);
         $campaignMapper = new CampaignMapper($connection);
 
         $result = $campaignMapper->find($query);
