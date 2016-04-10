@@ -177,7 +177,7 @@ class YandexUpdateOperation extends BaseOperation
 
         $updateLog = new YandexUpdateLog([
             'shop_id' => $this->shop->id,
-            'task_id' => 1,
+            'task_id' => $this->task->id,
             'entity_type' => 'product',
             'entity_id' => $product->id,
             'status' => YandexUpdateLog::STATUS_ERROR,
@@ -204,7 +204,7 @@ class YandexUpdateOperation extends BaseOperation
     ) {
         return new YandexUpdateLog([
             'shop_id' => $this->shop->id,
-            'task_id' => 1,
+            'task_id' => $this->task->id,
             'entity_type' => 'product',
             'entity_id' => $product->id,
             'operation' => $operation,
@@ -312,7 +312,7 @@ class YandexUpdateOperation extends BaseOperation
     protected function createCampaign(ApiProduct $apiProduct)
     {
         $campaignLog = new YandexUpdateLog([
-            'task_id' => 1,
+            'task_id' => $this->task->id,
             'shop_id' => $this->shop->id,
             'entity_type' => 'campaign',
             'operation' => YandexUpdateLog::OPERATION_CREATE

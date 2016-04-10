@@ -5,6 +5,7 @@ $params = require(__DIR__ . '/params.php');
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
+    'timezone' => 'Europe/Moscow',
     'bootstrap' => ['log'],
     'timeZone' => 'UTC',
     'name' => 'Yandex.Direct',

@@ -28,17 +28,14 @@ class TaskRunnerController extends Controller
             /** @var OperationInterface $operation */
             $operation = $this->createOperationByTask($task);
             try {
+                $task->markRun();
                 $operation->execute();
-                $task->status = TaskQueue::STATUS_SUCCESS;
+                $task->markCompleted();
             } catch (Exception $e) {
-                $task->error = $e->getMessage();
-                $task->status = TaskQueue::STATUS_ERROR;
+                $task->markError($e->getMessage());
             } catch (ErrorException $e) {
-                $task->error = $e->getMessage();
-                $task->status = TaskQueue::STATUS_ERROR;
+                $task->markError($e->getMessage());
             }
-
-            $task->save();
         }
     }
 

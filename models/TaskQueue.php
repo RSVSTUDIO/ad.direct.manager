@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $created_at
+ * @property string $started_at
  * @property string $status
  * @property string $operation
  * @property string $completed_at
@@ -37,7 +38,7 @@ class TaskQueue extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['created_at', 'completed_at'], 'safe'],
+            [['created_at', 'completed_at', 'started_at'], 'safe'],
             [['context', 'error'], 'string'],
             [['status', 'operation'], 'string', 'max' => 50],
             ['status', 'default', 'value' => self::STATUS_READY],
@@ -116,6 +117,38 @@ class TaskQueue extends \yii\db\ActiveRecord
         $task->save();
 
         return $task;
+    }
+
+    /**
+     * Помечаем задачу как запущенную
+     */
+    public function markRun()
+    {
+        $this->started_at = date(\DateTime::W3C);
+        $this->status = self::STATUS_RUN;
+        $this->save();
+    }
+
+    /**
+     * Помечаем задачу как завершенную
+     */
+    public function markCompleted()
+    {
+        $this->completed_at = date(\DateTime::W3C);
+        $this->status = self::STATUS_SUCCESS;
+        $this->save();
+    }
+
+    /**
+     * Задача завершилась с ошибкой
+     * @param string $message
+     */
+    public function markError($message = '')
+    {
+        $this->completed_at = date(\DateTime::W3C);
+        $this->status = self::STATUS_ERROR;
+        $this->error = $message;
+        $this->save();
     }
 
     /**
