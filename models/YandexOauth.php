@@ -81,7 +81,9 @@ class YandexOauth extends ActiveRecord
         if (!$userId) {
             $userId = Yii::$app->user->getId();
         }
+        
         $oauthToken = self::find()->where(['shop_id' => $shopId, 'user_id' => $userId])->one();
+
         return ArrayHelper::getValue($oauthToken, 'access_token');
     }
 

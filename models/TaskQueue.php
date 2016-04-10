@@ -77,7 +77,9 @@ class TaskQueue extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return array|null|\yii\db\ActiveRecord
+     * Возвращает задачу на выполнение
+     *
+     * @return $this
      * @throws \yii\db\Exception
      */
     public static function getNextTaskForRun()
@@ -114,5 +116,13 @@ class TaskQueue extends \yii\db\ActiveRecord
         $task->save();
 
         return $task;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContext()
+    {
+        return json_decode($this->context, true);
     }
 }

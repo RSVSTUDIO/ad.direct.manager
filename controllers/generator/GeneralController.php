@@ -70,7 +70,8 @@ class GeneralController extends BaseController
             'brandIds' => $brandIds,
             'shopId' => $shopId,
             'priceFrom' => (float) $this->request->post('priceFrom'),
-            'priceTo' => (float) $this->request->post('priceTo')
+            'priceTo' => (float) $this->request->post('priceTo'),
+            'userId' => \Yii::$app->user->getId()
         ];
 
         $task = TaskQueue::createNewTask($shopId, YandexUpdateOperation::OPERATION_YANDEX_UPDATE, $context);

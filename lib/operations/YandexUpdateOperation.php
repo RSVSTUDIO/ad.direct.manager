@@ -24,11 +24,13 @@ use app\lib\services\KeywordsService;
 use app\lib\services\YandexCampaignService;
 use app\models\Product;
 use app\models\Shop;
+use app\models\TaskQueue;
 use app\models\YandexCampaign;
+use app\models\YandexOauth;
 use app\models\YandexUpdateLog;
 use yii\helpers\ArrayHelper;
 
-class YandexUpdateOperation implements OperationInterface
+class YandexUpdateOperation extends BaseOperation
 {
     const OPERATION_YANDEX_UPDATE = 'yandexUpdate';
 
@@ -83,20 +85,15 @@ class YandexUpdateOperation implements OperationInterface
         'created' => []
     ];
 
-    /**
-     * YandexUpdate constructor.
-     * @param Shop $shop
-     * @param Connection $connection
-     */
-    public function __construct(Shop $shop, Connection $connection)
-    {
-        $this->shop = $shop;
-        $this->connection = $connection;
-        $this->init();
-    }
-
     protected function init()
     {
+        /** @var Shop $shop */
+        $this->shop = Shop::findOne($this->task->shop_id);
+        
+        $context = $this->task->getContext();
+
+        $this->connection = new Connection(YandexOauth::getTokenFor($this->shop->id, $context['userId']));
+        
         $this->logger = new ConsoleLogger();
         $campaignResource = new CampaignResource($this->connection);
         $adGroupResource = new AdGroupResource($this->connection);
