@@ -2,6 +2,9 @@
 
 namespace app\controllers;
 
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\resources\CampaignResource;
+use app\lib\services\YandexCampaignService;
 use Yii;
 use app\models\YandexCampaign;
 use app\models\search\YandexCampaignSearch;
@@ -42,36 +45,6 @@ class CampaignsController extends Controller
     }
 
     /**
-     * Displays a single YandexCampaign model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new YandexCampaign model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new YandexCampaign();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
      * Updates an existing YandexCampaign model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -82,12 +55,27 @@ class CampaignsController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->updateYandexCampaign($model);
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
             ]);
         }
+    }
+
+    /**
+     * Обновление информации о кампании в апи
+     *
+     * @param YandexCampaign $model
+     */
+    protected function updateYandexCampaign(YandexCampaign $model)
+    {
+        $connection = new Connection($model->shop->yandex_access_token);
+        $resource = new CampaignResource($connection);
+        $yandexCampaignService = new YandexCampaignService($resource);
+        
+        $yandexCampaignService->updateNegativeKeywords($model->yandex_id, $model->negative_keywords);
     }
 
     /**

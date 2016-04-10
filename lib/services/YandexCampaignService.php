@@ -125,21 +125,52 @@ class YandexCampaignService extends YandexService
             ],
         ];
 
-        $negativeKeywords = $this->getNegativeKeywords();
+        $negativeKeywords = $this->parseKeywords(Settings::getValue('negativeKeywords'));
 
         if (!empty($negativeKeywords)) {
             $campaignData['NegativeKeywords'] = [
-                'Items' => $this->getNegativeKeywords()
+                'Items' => $negativeKeywords
             ];
         }
 
         return $campaignData;
     }
 
-    protected function getNegativeKeywords()
+    /**
+     * Возвращает ключевые слова в виде массива из строки
+     *
+     * @param string $keywords
+     * @return mixed
+     */
+    protected function parseKeywords($keywords)
     {
-        $keywords = preg_split('#(\s+|,)#', Settings::getValue('negativeKeywords'), -1, PREG_SPLIT_NO_EMPTY);
+        $keywords = preg_split('#(\s+|,)#', $keywords, -1, PREG_SPLIT_NO_EMPTY);
 
         return array_unique(array_map('trim', $keywords));
+    }
+
+    /**
+     * Обновление минус слов кампании
+     *
+     * @param int $id
+     * @param string $keywords
+     * @return bool
+     */
+    public function updateNegativeKeywords($id, $keywords)
+    {
+        $updateData = [
+            'Id' => $id,
+            'NegativeKeywords' => [
+                'Items' => $this->parseKeywords($keywords)
+            ]
+        ];
+
+        $result = $this->campaignResource->update($updateData);
+
+        if (!$result->isSuccess()) {
+            $this->throwExceptionFromResult($result);
+        }
+
+        return $result->isSuccess();
     }
 }
