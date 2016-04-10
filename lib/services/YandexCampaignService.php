@@ -150,6 +150,21 @@ class YandexCampaignService extends YandexService
     }
 
     /**
+     * @param int $id
+     * @return mixed|null
+     */
+    public function findById($id)
+    {
+        $result = $this->campaignResource->findByIds($id);
+        
+        if ($result->count() > 0) {
+            return $result->first();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Обновление минус слов кампании
      *
      * @param int $id

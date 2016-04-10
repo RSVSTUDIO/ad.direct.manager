@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\lib\api\yandex\direct\Connection;
 use app\lib\api\yandex\direct\resources\CampaignResource;
 use app\lib\services\YandexCampaignService;
+use app\models\forms\CampaignForm;
 use Yii;
 use app\models\YandexCampaign;
 use app\models\search\YandexCampaignSearch;
@@ -54,8 +55,11 @@ class CampaignsController extends SiteController
     {
         $model = $this->findModel($id);
 
+        $resource = new CampaignResource(new Connection($model->shop->yandex_access_token));
+
+        $model->setCampaignService(new YandexCampaignService($resource));
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->updateYandexCampaign($model);
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [
@@ -95,12 +99,12 @@ class CampaignsController extends SiteController
      * Finds the YandexCampaign model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return YandexCampaign the loaded model
+     * @return CampaignForm
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = YandexCampaign::findOne($id)) !== null) {
+        if (($model = CampaignForm::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

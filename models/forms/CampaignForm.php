@@ -2,68 +2,86 @@
 /**
  * Created by PhpStorm.
  * User: den
- * Date: 27.03.16
- * Time: 12:04
+ * Date: 10.04.16
+ * Time: 22:07
  */
 
 namespace app\models\forms;
 
-use app\lib\api\yandex\direct\Connection;
-use app\lib\api\yandex\direct\entity\Campaign;
-use app\lib\api\yandex\direct\mappers\CampaignMapper;
-use app\models\Shop;
-use yii\base\Model;
+use app\lib\services\YandexCampaignService;
+use app\models\YandexCampaign;
+use yii\helpers\ArrayHelper;
 
-class CampaignForm extends Model
+class CampaignForm extends YandexCampaign
 {
     /**
      * @var string
      */
-    public $name;
+    private $keywords;
 
     /**
-     * @var int
+     * @var YandexCampaignService
      */
-    public $shopId;
-
-    /**
-     * @var int
-     */
-    public $id;
-
-    /**
-     * @var string
-     */
-    public $currency;
-
-    /**
-     * @var string
-     */
-    public $clientInfo;
+    protected $campaignService;
 
     /**
      * @inheritDoc
      */
     public function rules()
     {
-        return [
-            [['name', 'currency', 'clientInfo'], 'string'],
-            [['shopId', 'id'], 'required'],
-        ];
+        return array_merge(parent::rules(), [
+            ['keywords', 'string']
+        ]);
     }
-    
-    public function save()
+
+    /**
+     * @param YandexCampaignService $service
+     */
+    public function setCampaignService(YandexCampaignService $service)
     {
-        $shop = Shop::findOne($this->shopId);
-        $connection = new Connection($shop->yandex_access_token);
-        $campaignMapper = new CampaignMapper($connection);
-        
-        $campaign = [
-            'Id' => $this->id,
-            'Name' => $this->name,
-            'ClientInfo' => $this->clientInfo
-        ];
-        
-        return $campaignMapper->update($campaign);
+        $this->campaignService = $service;
+    }
+
+    /**
+     * @return string
+     */
+    public function getKeywords()
+    {
+        if (is_null($this->keywords)) {
+            $keywords = ArrayHelper::getValue($this->getCampaignFromYandex(), 'NegativeKeywords.Items');
+            $this->keywords = implode(', ', $keywords);
+        }
+
+        return $this->keywords;
+    }
+
+    /**
+     * @param $keywords
+     */
+    public function setKeywords($keywords)
+    {
+        $this->keywords = $keywords;
+    }
+
+    /**
+     * @return mixed|null
+     */
+    protected function getCampaignFromYandex()
+    {
+        static $campaign;
+        if (is_null($campaign)) {
+            $campaign = $this->campaignService->findById($this->yandex_id);
+        }
+
+        return $campaign;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->campaignService->updateNegativeKeywords($this->yandex_id, $this->keywords);
     }
 }

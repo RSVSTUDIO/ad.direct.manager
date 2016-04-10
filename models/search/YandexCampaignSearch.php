@@ -23,7 +23,7 @@ class YandexCampaignSearch extends YandexCampaign
     {
         return [
             [['id', 'shop_id', 'brand_id', 'yandex_id', 'products_count'], 'integer'],
-            [['title', 'shop.name', 'negative_keywords'], 'safe'],
+            [['title', 'shop.name'], 'safe'],
         ];
     }
 
