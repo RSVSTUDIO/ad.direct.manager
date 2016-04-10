@@ -26,7 +26,8 @@ class YandexUpdateLog extends \yii\db\ActiveRecord
 
     const OPERATION_CREATE = 'create';
     const OPERATION_UPDATE = 'update';
-    CONST OPERATION_REMOVE = 'remove';
+    const OPERATION_REMOVE = 'remove';
+    const OPERATION_API_LOAD = 'load_from_api';
     
     /**
      * @inheritdoc

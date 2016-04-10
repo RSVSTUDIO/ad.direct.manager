@@ -13,7 +13,7 @@ $form = ActiveForm::begin();
 
 <div class="row">
     <div class="col-sm-3">
-            <?= $form->field($model, 'brands', [
+            <?= $form->field($model, 'brandsList', [
                 'template' => "{label}\n{beginWrapper}\n<div style=\"height: 500px; overflow: hidden; overflow-y: scroll\">{input}</div>\n{error}\n{endWrapper}\n{hint}"
             ])->checkboxList(ArrayHelper::map($brands, 'id', 'title'))->label('Бренды')?>
     </div>
@@ -26,31 +26,31 @@ $form = ActiveForm::begin();
                     </div>
                     <div class="col-sm-1" style="text-align: center">от</div>
                     <div class="col-sm-4">
-                        <?= $form->field($model, 'priceFrom', ['template' => "{input}\n{error}"])->textInput()?>
+                        <?= $form->field($model, 'price_from', ['template' => "{input}\n{error}"])->textInput()?>
                     </div>
                     <div class="col-sm-1">до</div>
                     <div class="col-sm-4">
-                        <?= $form->field($model, 'priceTo', ['template' => "{input}\n{error}"])->textInput()?>
+                        <?= $form->field($model, 'price_to', ['template' => "{input}\n{error}"])->textInput()?>
                     </div>
                 </div>
             </div>
             <div class="col-sm-3">
-                <a class="btn btn-info">Сгенерировать файл</a>
-            </div>
-            <div class="col-sm-3">
-                <a class="btn btn-info">Обновить наличие</a>
-            </div>
-            <div class="col-sm-2">
-                <a class="btn btn-info">Обновить цену</a>
+                <?= Html::button('Обновить', ['class' => 'btn btn-default yandex-update'])?>
+                <div>
+                    asdf
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-sm-3">
-        <a class="btn btn-info">Создать, обновить компанию</a>
-    </div>
-    <div class="col-sm-3">
-        <a class="btn btn-success">Сохранить</a>
+        <div class="row">
+            <div class="col-sm-3">
+                <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success'])?>
+            </div>
+        </div>
     </div>
 </div>
 
 <? $form->end()?>
+
+<?php
+
+\app\assets\GeneralAsset::register($this);

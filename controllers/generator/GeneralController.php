@@ -10,7 +10,7 @@ namespace app\controllers\generator;
 
 use app\lib\api\shop\gateways\BrandsGateway;
 use app\controllers\BaseController;
-use app\models\forms\GeneralSettingsForm;
+use app\models\forms\GeneratorSettingsForm;
 use app\models\Shop;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -26,18 +26,28 @@ class GeneralController extends BaseController
         }
 
         $brandsApiGateway = new BrandsGateway($shop->brand_api_url, $shop->api_secret_key);
-        $form = new GeneralSettingsForm();
+
+        $model = GeneratorSettingsForm::find()->andWhere(['shop_id' => $shopId])->one();
+        if (!$model) {
+            $model = new GeneratorSettingsForm([
+                'shop_id' => $shopId
+            ]);
+        }
+
+        $postData = $this->request->post();
+
+        if ($model->load($postData) && $model->save()) {
+            //success save
+        }
 
         return $this->render('index', [
             'brands' => $brandsApiGateway->getBrandsList(),
-            'model' => $form
+            'model' => $model
         ]);
     }
 
-    public function actionUpdateProductAvailable()
+    public function actionStartUpdate()
     {
         $this->response->format = Response::FORMAT_JSON;
-        
-        
     }
 }

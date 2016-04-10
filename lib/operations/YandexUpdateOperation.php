@@ -142,10 +142,7 @@ class YandexUpdateOperation implements OperationInterface
             foreach ($products as $product) {
                 $this->logger->log('Start product id - ' . $product->id);
                 if (empty($apiProducts[$product->product_id])) {
-                    $this->statistics['errors'][] = [
-                        'id' => $product->product_id,
-                        'message' => 'Not loaded from api'
-                    ];
+                    $this->productNotLoadFromApi($product);
                     continue;
                 }
                 //описание товара полученное через api
@@ -162,66 +159,100 @@ class YandexUpdateOperation implements OperationInterface
                     $yaCampaign = $product->yandexCampaign;
                 }
 
-                $productUpdateLog = new YandexUpdateLog([
-                    'shop_id' => $this->shop->id,
-                    'task_id' => 1,
-                    'entity_type' => 'product',
-                    'entity_id' => $product->id,
-                    'status' => YandexUpdateLog::STATUS_SUCCESS
-                ]);
-
-                try {
-                    $this->processProductUpdate($product, $apiProduct, $yaCampaign, $productUpdateLog);
-                } catch (YandexException $e) {
-                    $productUpdateLog->status = YandexUpdateLog::STATUS_ERROR;
-                    $productUpdateLog->message = $e->getMessage();
-                    $productUpdateLog->save();
-                }
+                $this->processProductUpdate($product, $apiProduct, $yaCampaign);
             }
         }
+    }
+
+    /**
+     * Обработка ситуации, когда товар не был получен из api
+     * @param Product $product
+     * @return null
+     */
+    protected function productNotLoadFromApi(Product $product)
+    {
+        //елси товара и не было в наличии, возможно товар удалили из базы магазина
+        if (!$product->is_available) {
+            return null;
+        }
+
+        $updateLog = new YandexUpdateLog([
+            'shop_id' => $this->shop->id,
+            'task_id' => 1,
+            'entity_type' => 'product',
+            'entity_id' => $product->id,
+            'status' => YandexUpdateLog::STATUS_ERROR,
+            'operation' => YandexUpdateLog::OPERATION_API_LOAD,
+            'message' => 'Товар не загружен через апи'
+        ]);
+        $updateLog->save();
+
+        if (!empty($product->yandex_ad_id)) {
+            $this->removeAdProduct($product);
+        }
+    }
+
+    /**
+     * Создает объект для логирования операции
+     *
+     * @param Product $product
+     * @param string $operation
+     * @param string $status
+     * @return YandexUpdateLog
+     */
+    protected function createUpdateLogForProduct(
+        Product $product, $operation, $status = YandexUpdateLog::STATUS_SUCCESS
+    ) {
+        return new YandexUpdateLog([
+            'shop_id' => $this->shop->id,
+            'task_id' => 1,
+            'entity_type' => 'product',
+            'entity_id' => $product->id,
+            'operation' => $operation,
+            'status' => $status
+        ]);
     }
 
     /**
      * @param Product $product
      * @param ApiProduct $apiProduct
      * @param YandexCampaign $yaCampaign
-     * @param YandexUpdateLog $updateLog
      * @throws YandexException
      */
-    protected function processProductUpdate(
-        Product $product,
-        ApiProduct $apiProduct,
-        YandexCampaign $yaCampaign,
-        YandexUpdateLog $updateLog
-    ) {
+    protected function processProductUpdate(Product $product, ApiProduct $apiProduct, YandexCampaign $yaCampaign)
+    {
         if (empty($product->yandex_ad_id) && $product->is_available) {
-            $this->createAdProduct($product, $apiProduct, $yaCampaign, $updateLog);
+            $this->createAdProduct($product, $apiProduct, $yaCampaign);
         } elseif (!$apiProduct->isAvailable) {
-            $this->removeAdProduct($product, $updateLog);
+            $this->removeAdProduct($product);
         } elseif ($product->price != $apiProduct->price) {
-            $this->updateAdProduct($product, $apiProduct, $updateLog);
+            $this->updateAdProduct($product, $apiProduct);
         }
 
         $product->save();
     }
 
     /**
-     * Снятие объявления
+     * Обновление объявления
      *
      * @param Product $product
      * @param ApiProduct $apiProduct
-     * @param YandexUpdateLog $updateLog
      * @throws YandexException
      */
-    protected function updateAdProduct(
-        Product $product,
-        ApiProduct $apiProduct,
-        YandexUpdateLog $updateLog
-    ) {
-        $updateLog->operation = YandexUpdateLog::OPERATION_UPDATE;
+    protected function updateAdProduct(Product $product, ApiProduct $apiProduct)
+    {
+        $updateLog = $this->createUpdateLogForProduct($product, YandexUpdateLog::OPERATION_UPDATE);
         $product->price = $apiProduct->price;
-        $this->adService->update($product, $apiProduct);
-        $this->logger->log(sprintf('Update ad for product %d, %s', $product->id, $product->title));
+        $product->is_available = $apiProduct->isAvailable;
+        $this->logger->log(sprintf('Start update ad for product %d, %s', $product->id, $product->title));
+
+        try {
+            $this->adService->update($product, $apiProduct);
+        } catch (YandexException $e) {
+            $updateLog->status = YandexUpdateLog::STATUS_ERROR;
+            $updateLog->message = $e->getMessage();
+        }
+
         $updateLog->save();
     }
 
@@ -229,14 +260,21 @@ class YandexUpdateOperation implements OperationInterface
      * Обновление объявления
      *
      * @param Product $product
-     * @param YandexUpdateLog $updateLog
      */
-    protected function removeAdProduct(Product $product, YandexUpdateLog $updateLog)
+    protected function removeAdProduct(Product $product)
     {
+        $updateLog = $this->createUpdateLogForProduct($product, YandexUpdateLog::OPERATION_REMOVE);
         $updateLog->operation = YandexUpdateLog::OPERATION_REMOVE;
         $product->is_available = false;
-        $this->adService->removeAd($product);
         $this->logger->log(sprintf('Remove ad for product %d, %s', $product->id, $product->title));
+
+        try {
+            $this->adService->removeAd($product);
+        } catch (YandexException $e) {
+            $updateLog->status = YandexUpdateLog::STATUS_ERROR;
+            $updateLog->message = $e->getMessage();
+        }
+
         $updateLog->save();
     }
 
@@ -246,21 +284,23 @@ class YandexUpdateOperation implements OperationInterface
      * @param Product $product
      * @param ApiProduct $apiProduct
      * @param YandexCampaign $yaCampaign
-     * @param YandexUpdateLog $updateLog
      * @throws YandexException
      */
-    protected function createAdProduct(
-        Product $product,
-        ApiProduct $apiProduct,
-        YandexCampaign $yaCampaign,
-        YandexUpdateLog $updateLog
-    ) {
-        $updateLog->operation = YandexUpdateLog::OPERATION_CREATE;
-        $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
-        $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
-        $yaCampaign->incrementProductsCount();
-        $this->keywordsService->createKeywordsFor($product);
+    protected function createAdProduct(Product $product, ApiProduct $apiProduct, YandexCampaign $yaCampaign)
+    {
+        $updateLog = $this->createUpdateLogForProduct($product, YandexUpdateLog::OPERATION_CREATE);
         $this->logger->log(sprintf('Create ad for product %d, %s', $product->id, $product->title));
+
+        try {
+            $product->yandex_adgroup_id = $this->adGroupService->createAdGroup($product);
+            $product->yandex_ad_id = $this->adService->createAd($product, $apiProduct);
+            $this->keywordsService->createKeywordsFor($product);
+            $yaCampaign->incrementProductsCount();
+        } catch (YandexException $e) {
+            $updateLog->status = YandexUpdateLog::STATUS_ERROR;
+            $updateLog->message = $e->getMessage();
+        }
+
         $updateLog->save();
     }
 
@@ -295,6 +335,7 @@ class YandexUpdateOperation implements OperationInterface
         $this->logger->log('Create campaign, campaign id - ' . $yaCampaign->id);
         $campaignLog->entity_id = $yaCampaign->id;
         $campaignLog->status = YandexUpdateLog::STATUS_SUCCESS;
+        $campaignLog->save();
 
         return $yaCampaign;
     }

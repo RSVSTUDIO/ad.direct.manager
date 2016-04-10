@@ -1,4 +1,4 @@
-var KeywordsController = (function  ($) {
+(function ($) {
 
     function getShopId() {
         return window.location.search.match(/shopId=(\d+)/)[1];
