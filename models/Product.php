@@ -10,6 +10,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $shop_id
+ * @property int $brand_id
  * @property integer $product_id
  * @property string $title
  * @property string $seo_title
@@ -45,7 +46,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['shop_id', 'product_id'], 'required'],
-            [['shop_id', 'product_id'], 'integer'],
+            [['shop_id', 'product_id', 'brand_id'], 'integer'],
             [['keywords'], 'string'],
             [['title'], 'string'],
             [['seo_title'], 'string'],

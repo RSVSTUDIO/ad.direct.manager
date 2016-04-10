@@ -28,6 +28,7 @@ use app\models\TaskQueue;
 use app\models\YandexCampaign;
 use app\models\YandexOauth;
 use app\models\YandexUpdateLog;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 
 class YandexUpdateOperation extends BaseOperation
@@ -127,11 +128,37 @@ class YandexUpdateOperation extends BaseOperation
         return $result;
     }
 
-    public function execute($context = [])
+    /**
+     * Возвращает запрос на получение товаров
+     *
+     * @return ActiveQuery
+     */
+    protected function getQuery()
     {
-        $productQuery = Product::find()
-            ->andWhere(['shop_id' => $this->shop->id])
-            ->orderBy('id');
+        $context = $this->task->getContext();
+        $criteria = [
+            'shop_id' => $context['shopId'],
+            'brand_id' => explode(',', (array)$context['brandIds'])
+        ];
+
+        $query = Product::find()->andWhere($criteria);
+
+        if (!empty($context['priceFrom'])) {
+            $query->andWhere(['>=', 'price', $context['priceFrom']]);
+        }
+        if (!empty($context['priceTo'])) {
+            $query->andWhere(['<=', 'price', $context['priceTo']]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute($params = [])
+    {
+        $productQuery = $this->getQuery();
 
         /** @var Product[] $products */
         foreach ($productQuery->batch() as $products) {

@@ -11,8 +11,10 @@ namespace app\lib\operations;
 interface OperationInterface
 {
     /**
-     * @param array $context
+     * Запуск операции
+     *
+     * @param array $params
      * @return mixed
      */
-    public function execute($context = []);
+    public function execute($params = []);
 }

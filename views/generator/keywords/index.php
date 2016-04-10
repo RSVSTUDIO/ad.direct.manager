@@ -64,6 +64,7 @@ $form = ActiveForm::begin([
                     'attribute' => 'seo_title',
                     'value' => function ($model) {
                         echo Html::hiddenInput("Products[{$model['id']}][title]", $model['title']);
+                        echo Html::hiddenInput("Products[{$model['id']}][brand_id]", $model['brand']['id']);
                         echo Html::hiddenInput("Products[{$model['id']}][is_available]", $model['is_available']);
                         return Html::input('text', "Products[{$model['id']}][seo_title]", $model['seo_title'], ['class' => 'form-control']);
                     },
