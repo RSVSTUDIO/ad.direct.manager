@@ -32,6 +32,19 @@ class AdResource extends AbstractResource
     }
 
     /**
+     * Отправка объявления на модерацию
+     *
+     * @param int $ids
+     * @return ChangeResult
+     */
+    public function moderate($ids)
+    {
+        $result = $this->query(['SelectionCriteria' => (array) $ids], 'moderate');
+
+        return new ChangeResult($result['result']['ModerateResults']);
+    }
+
+    /**
      * Убрать объвление с показа
      *
      * @param int|int[] $ids

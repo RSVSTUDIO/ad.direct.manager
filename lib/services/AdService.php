@@ -61,7 +61,15 @@ class AdService extends YandexService
             $this->throwExceptionFromResult($result);
         }
 
-        return $result->getIds()[0];
+        $id = $result->getIds()[0];
+
+        $result = $this->adResource->moderate($id);
+
+        if (!$result->isSuccess()) {
+            $this->throwExceptionFromResult($result);
+        }
+
+        return $id;
     }
 
     /**
