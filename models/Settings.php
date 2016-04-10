@@ -62,4 +62,26 @@ class Settings extends \yii\db\ActiveRecord
             return $default;
         }
     }
+
+    /**
+     * Сохранение значения
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return bool
+     */
+    public static function saveValue($name, $value)
+    {
+        $setting = self::find()->andWhere(['name' => $name])->one();
+
+        if (!$setting) {
+            $setting = new Settings([
+                'name' => $name
+            ]);
+        }
+
+        $setting->value = $value;
+
+        return $setting->save();
+    }
 }
