@@ -138,7 +138,7 @@ class YandexUpdateOperation extends BaseOperation
         $context = $this->task->getContext();
         $criteria = [
             'shop_id' => $context['shopId'],
-            'brand_id' => explode(',', (array)$context['brandIds'])
+            'brand_id' => $context['brandIds']
         ];
 
         $query = Product::find()->andWhere($criteria);
