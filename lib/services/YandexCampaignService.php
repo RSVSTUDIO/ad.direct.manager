@@ -63,6 +63,7 @@ class YandexCampaignService extends YandexService
             'shop_id' => $shopId,
             'brand_id' => $brandId,
             'yandex_id' => $campaignId,
+            'negative_keywords' => Settings::getValue('negativeKeywords'),
             'title' => $name,
             'products_count' => 0
         ]);
@@ -124,14 +125,21 @@ class YandexCampaignService extends YandexService
             ],
         ];
 
-        $negativeKeywords = Settings::getValue('negativeKeywords');
+        $negativeKeywords = $this->getNegativeKeywords();
 
-        if ($negativeKeywords) {
+        if (!empty($negativeKeywords)) {
             $campaignData['NegativeKeywords'] = [
-                'Items' => explode(',', $negativeKeywords)
+                'Items' => $this->getNegativeKeywords()
             ];
         }
 
         return $campaignData;
+    }
+
+    protected function getNegativeKeywords()
+    {
+        $keywords = preg_split('#(\s+|,)#', Settings::getValue('negativeKeywords'), -1, PREG_SPLIT_NO_EMPTY);
+
+        return array_unique(array_map('trim', $keywords));
     }
 }

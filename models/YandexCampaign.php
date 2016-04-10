@@ -13,6 +13,7 @@ use Yii;
  * @property string $title
  * @property integer $yandex_id
  * @property int $products_count
+ * @property string $negative_keywords
  *
  * @property Shop $shop
  */
@@ -37,7 +38,8 @@ class YandexCampaign extends \yii\db\ActiveRecord
             [['shop_id', 'brand_id', 'title', 'yandex_id'], 'required'],
             [['shop_id', 'brand_id', 'yandex_id'], 'integer'],
             ['products_count', 'integer'],
-            [['title'], 'string', 'max' => 255]
+            [['title'], 'string', 'max' => 255],
+            ['negative_keywords', 'string']
         ];
     }
 
@@ -48,10 +50,12 @@ class YandexCampaign extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'shop_id' => 'Shop ID',
-            'brand_id' => 'Brand ID',
-            'title' => 'Title',
+            'shop_id' => 'Магазин',
+            'brand_id' => 'Бренд',
+            'title' => 'Название кампании',
             'yandex_id' => 'Yandex ID',
+            'products_count' => 'Товаров в кампании',
+            'negative_keywords' => 'Минус слова'
         ];
     }
 

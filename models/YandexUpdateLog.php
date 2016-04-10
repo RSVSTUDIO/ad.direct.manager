@@ -50,7 +50,7 @@ class YandexUpdateLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_id', 'shop_id', 'entity_type', 'entity_id', 'status'], 'required'],
+            [['task_id', 'shop_id', 'entity_type', 'status'], 'required'],
             [['task_id', 'shop_id', 'entity_id'], 'integer'],
             [['created_at'], 'safe'],
             [['entity_type', 'status'], 'string', 'max' => 50],

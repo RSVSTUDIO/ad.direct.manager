@@ -330,7 +330,8 @@ class YandexUpdateOperation extends BaseOperation
      * Создание новой кампании
      *
      * @param ApiProduct $apiProduct
-     * @return \app\models\YandexCampaign
+     * @return YandexCampaign
+     * @throws YandexException
      */
     protected function createCampaign(ApiProduct $apiProduct)
     {
@@ -351,7 +352,7 @@ class YandexUpdateOperation extends BaseOperation
             $campaignLog->save();
             $this->logger->log('Fail on create campaign: ' . $e->getMessage());
 
-            throw new $e;
+            throw $e;
         }
 
         $this->logger->log('Create campaign, campaign id - ' . $yaCampaign->id);

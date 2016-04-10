@@ -39,6 +39,7 @@ AppAsset::register($this);
         'items' => [
             ['label' => 'Пользователи', 'url' => ['/users']],
             ['label' => 'Магазины', 'url' => ['/shops']],
+            ['label' => 'Список кампаний', 'url' => ['/campaigns']],
             ['label' => 'Tasks', 'url' => ['/task-queue']],
             ['label' => 'Настройки', 'url' => ['/settings']],
             Yii::$app->user->isGuest ? (
