@@ -168,4 +168,16 @@ class TaskQueue extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Shop::className(), ['id' => 'shop_id']);
     }
+
+    /**
+     * @param int $shopId
+     * @return $this
+     */
+    public static function getLastRunnedFor($shopId)
+    {
+        return self::find()->andWhere([
+            'shop_id' => $shopId,
+            'status' => [self::STATUS_SUCCESS, self::STATUS_ERROR]
+        ])->orderBy('id DESC')->one();
+    }
 }

@@ -45,7 +45,8 @@ class GeneralController extends BaseController
 
         return $this->render('index', [
             'brands' => $brandsApiGateway->getBrandsList(),
-            'model' => $model
+            'model' => $model,
+            'lastTask' => TaskQueue::getLastRunnedFor($shopId)
         ]);
     }
 

@@ -7,6 +7,7 @@ use app\models\forms\GeneralSettingsForm;
 
 /** @var array $brands */
 /** @var GeneralSettingsForm $model */
+/** @var \app\models\TaskQueue $lastTask */
 
 $form = ActiveForm::begin();
 
@@ -36,14 +37,21 @@ $this->title = 'Настройка генератора';
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-5">
                 <?= Html::button('Обновить', [
                     'class' => 'btn btn-primary yandex-update',
                     'data-shop-id' => $model->shop_id
                 ])?>
-                <div>
-                    asdf
-                </div>
+                <?if (!empty($lastTask)):?>
+                    <div>
+                        Последний запуск: <?=date('d.m.Y H:i:s', strtotime($lastTask->completed_at))?>,
+                    </div>
+                    <div>
+                        статус: <span style="color: <?=$lastTask->status == 'success' ? "green" :"red"?>"><?=$lastTask->status?></span>,
+                        <?=Html::a('подробней', \yii\helpers\Url::to(['/task-queue/details', 'task_id' => $lastTask->id]))?>
+                    </div>
+                <?endif?>
+
             </div>
         </div>
         <div class="row">
