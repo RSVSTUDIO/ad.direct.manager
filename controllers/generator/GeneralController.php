@@ -8,6 +8,7 @@
 
 namespace app\controllers\generator;
 
+use app\controllers\SiteController;
 use app\lib\api\shop\gateways\BrandsGateway;
 use app\controllers\BaseController;
 use app\lib\operations\YandexUpdateOperation;
@@ -18,7 +19,7 @@ use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
-class GeneralController extends BaseController
+class GeneralController extends SiteController
 {
     public function actionIndex($shopId)
     {

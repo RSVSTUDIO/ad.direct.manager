@@ -22,6 +22,11 @@ class YandexCampaign extends \yii\db\ActiveRecord
     const MAX_CAMPAIGN_PRODUCTS = 999;
 
     /**
+     * @var array
+     */
+    public $yandexData = [];
+
+    /**
      * @inheritdoc
      */
     public static function tableName()

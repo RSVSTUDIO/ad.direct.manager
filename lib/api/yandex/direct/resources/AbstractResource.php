@@ -47,18 +47,12 @@ abstract class AbstractResource
      * Поиск сущности по id
      *
      * @param mixed $id
-     * @return mixed|null
+     * @return Result
      */
-    public function findById($id)
+    public function findByIds($id)
     {
         $query = new $this->queryClass(['ids' => $id]);
-        $result = $this->find($query);
-        
-        if ($result->count() > 0) {
-            return $result->first();
-        } else {
-            return null;
-        }
+        return $this->find($query);
     }
 
     /**

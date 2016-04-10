@@ -2,7 +2,7 @@
 
 namespace app\models;
 
-use app\components\api\shop\models\ApiProduct;
+use app\lib\api\shop\models\ApiProduct;
 use Yii;
 
 /**

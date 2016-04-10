@@ -2,6 +2,9 @@
 
 namespace app\models\search;
 
+use app\lib\api\yandex\direct\Connection;
+use app\lib\api\yandex\direct\resources\CampaignResource;
+use app\lib\provider\ActiveCampaignProvider;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -57,7 +60,7 @@ class YandexCampaignSearch extends YandexCampaign
             $query->from(['shop' => 'shops']);
         }]);
 
-        $dataProvider = new ActiveDataProvider([
+        $dataProvider = new ActiveCampaignProvider([
             'query' => $query,
         ]);
 

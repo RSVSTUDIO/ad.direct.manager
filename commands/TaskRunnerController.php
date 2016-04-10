@@ -54,16 +54,4 @@ class TaskRunnerController extends Controller
 
         return new $operationClass($task);
     }
-
-    protected function getStub()
-    {
-        return [
-            'context' => [
-                'shopId' => 1,
-                'userId' => 1,
-            ],
-            'operation' => 'updateAvailability'
-        ];
-    }
-
 }
