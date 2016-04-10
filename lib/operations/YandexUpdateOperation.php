@@ -30,6 +30,8 @@ use yii\helpers\ArrayHelper;
 
 class YandexUpdateOperation implements OperationInterface
 {
+    const OPERATION_YANDEX_UPDATE = 'yandexUpdate';
+
     /**
      * @var Shop
      */

@@ -9,6 +9,8 @@ use app\models\forms\GeneralSettingsForm;
 /** @var GeneralSettingsForm $model */
 
 $form = ActiveForm::begin();
+
+$this->title = 'Настройка генератора';
 ?>
 
 <div class="row">
@@ -35,7 +37,10 @@ $form = ActiveForm::begin();
                 </div>
             </div>
             <div class="col-sm-3">
-                <?= Html::button('Обновить', ['class' => 'btn btn-default yandex-update'])?>
+                <?= Html::button('Обновить', [
+                    'class' => 'btn btn-primary yandex-update',
+                    'data-shop-id' => $model->shop_id
+                ])?>
                 <div>
                     asdf
                 </div>

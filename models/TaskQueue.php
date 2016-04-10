@@ -14,6 +14,7 @@ use Yii;
  * @property string $completed_at
  * @property string $context
  * @property string $error
+ * @property int $shop_id
  */
 class TaskQueue extends \yii\db\ActiveRecord
 {
@@ -39,7 +40,8 @@ class TaskQueue extends \yii\db\ActiveRecord
             [['created_at', 'completed_at'], 'safe'],
             [['context', 'error'], 'string'],
             [['status', 'operation'], 'string', 'max' => 50],
-            ['status', 'default', 'value' => self::STATUS_READY]
+            ['status', 'default', 'value' => self::STATUS_READY],
+            ['shop_id', 'integer']
         ];
     }
 
@@ -60,6 +62,21 @@ class TaskQueue extends \yii\db\ActiveRecord
     }
 
     /**
+     * Имеются ли таски на выполнение
+     *
+     * @param int $shopId
+     * @return bool
+     */
+    public static function hasReadyTasks($shopId)
+    {
+        return self::find()
+            ->andWhere([
+                'shop_id' => $shopId,
+                'status' => [self::STATUS_READY, self::STATUS_RUN]
+            ])->exists();
+    }
+
+    /**
      * @return array|null|\yii\db\ActiveRecord
      * @throws \yii\db\Exception
      */
@@ -73,6 +90,28 @@ class TaskQueue extends \yii\db\ActiveRecord
             $task->save();
         }
         $transaction->commit();
+
+        return $task;
+    }
+
+    /**
+     * Создание нового таска
+     *
+     * @param int $shopId
+     * @param string $operation
+     * @param array $context
+     * @return TaskQueue
+     */
+    public static function createNewTask($shopId, $operation, array $context = [])
+    {
+        $task = new TaskQueue([
+            'shop_id' => $shopId,
+            'status' => self::STATUS_READY,
+            'operation' => $operation,
+            'context' => json_encode($context)
+        ]);
+
+        $task->save();
 
         return $task;
     }

@@ -10,8 +10,11 @@ namespace app\controllers\generator;
 
 use app\lib\api\shop\gateways\BrandsGateway;
 use app\controllers\BaseController;
+use app\lib\operations\YandexUpdateOperation;
 use app\models\forms\GeneratorSettingsForm;
 use app\models\Shop;
+use app\models\TaskQueue;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -37,7 +40,7 @@ class GeneralController extends BaseController
         $postData = $this->request->post();
 
         if ($model->load($postData) && $model->save()) {
-            //success save
+            return $this->redirect(Url::current());
         }
 
         return $this->render('index', [
@@ -46,8 +49,40 @@ class GeneralController extends BaseController
         ]);
     }
 
+    /**
+     * Добавление задачи на обновление
+     * @return array
+     */
     public function actionStartUpdate()
     {
         $this->response->format = Response::FORMAT_JSON;
+
+        $brandIds = array_map('intval', $this->request->post('brandIds', []));
+        $shopId = $this->request->post('shopId');
+
+        if (TaskQueue::hasReadyTasks($shopId)) {
+            return [
+                'message' => 'Обновление уже запущено'
+            ];
+        }
+
+        $context = [
+            'brandIds' => $brandIds,
+            'shopId' => $shopId,
+            'priceFrom' => (float) $this->request->post('priceFrom'),
+            'priceTo' => (float) $this->request->post('priceTo')
+        ];
+
+        $task = TaskQueue::createNewTask($shopId, YandexUpdateOperation::OPERATION_YANDEX_UPDATE, $context);
+
+        if ($task->hasErrors()) {
+            $message = 'Возникли ошибки: ' . reset($task->getFirstErrors());
+        } else {
+            $message = 'Задача на обновление успешно создана';
+        }
+
+        return [
+            'message' => $message
+        ];
     }
 }
