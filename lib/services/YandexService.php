@@ -20,7 +20,7 @@ class YandexService
     public function throwExceptionFromResult(ChangeResult $result)
     {
         $errorInfo = $result->firstError();
-        $errorMsg = $errorInfo['Code'] . ':' . $errorInfo['Message'];
+        $errorMsg = $errorInfo['Code'] . ': ' . $errorInfo['Message'];
         if (!empty($errorInfo['Details'])) {
             $errorMsg .= ': ' . $errorInfo['Details'];
         }

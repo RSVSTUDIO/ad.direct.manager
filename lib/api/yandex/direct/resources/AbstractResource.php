@@ -47,28 +47,34 @@ abstract class AbstractResource
      * Поиск сущности по id
      *
      * @param mixed $id
+     * @param array $fieldNames
      * @return Result
      */
-    public function findByIds($id)
+    public function findByIds($id, $fieldNames = [])
     {
         $query = new $this->queryClass(['ids' => $id]);
-        return $this->find($query);
+        return $this->find($query, $fieldNames);
     }
 
     /**
      * Поиск
      *
      * @param AbstractQuery|array $query
+     * @param array $fieldNames
      * @return Result
      * @throws \app\lib\api\yandex\direct\exceptions\ConnectionException
      */
-    public function find($query)
+    public function find($query, $fieldNames = [])
     {
-        if ($query instanceof AbstractQuery) {
-            $query = $query->getQuery();
+        if (!$query instanceof AbstractQuery) {
+            $query = new $this->queryClass($query);
         }
 
-        $result = $this->connection->query($this->resourceName, $query);
+        if (!empty($fieldNames)) {
+            $query->setFieldNames($fieldNames);
+        }
+
+        $result = $this->connection->query($this->resourceName, $query->getQuery());
 
         return $this->createResult($result);
     }

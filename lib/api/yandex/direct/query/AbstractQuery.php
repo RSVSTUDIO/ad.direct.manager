@@ -36,13 +36,11 @@ abstract class AbstractQuery extends Object
     /**
      * AbstractQuery constructor.
      * @param null|array|CriteriaInterface $criteria
-     * @param array $page
      * @param array $config
      */
-    public function __construct($criteria = [], $page = [], $config = [])
+    public function __construct($criteria = [], $config = [])
     {
         $this->setSelectionCriteria($criteria);
-        $this->setPage($page);
         parent::__construct($config);
     }
 
@@ -86,9 +84,9 @@ abstract class AbstractQuery extends Object
      * @param array $fieldNames
      * @return $this
      */
-    public function setFieldNames($fieldNames)
+    public function setFieldNames(array $fieldNames)
     {
-        $this->fieldNames = (array)$fieldNames;
+        $this->fieldNames = array_map('ucfirst', (array)$fieldNames);
         return $this;
     }
 

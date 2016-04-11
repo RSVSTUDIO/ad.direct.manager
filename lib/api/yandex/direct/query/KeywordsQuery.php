@@ -13,6 +13,15 @@ use app\lib\api\yandex\direct\query\keywords\KeywordsSelectionCriteria;
 class KeywordsQuery extends AbstractQuery
 {
     /**
+     * @var array
+     */
+    public $fieldNames = [
+        'Id', 'AdGroupId', 'CampaignId', 'Keyword', 'Bid',
+        'ContextBid', 'StrategyPriority', 'Status', 'State',
+        'Productivity', 'StatisticsSearch', 'StatisticsNetwork'
+    ];
+
+    /**
      * @inheritDoc
      */
     protected function createSelectionCriteria(array $params = [])

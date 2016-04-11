@@ -12,5 +12,28 @@ use app\lib\api\yandex\direct\query\selectionCriteria\SelectionCriteria;
 
 class KeywordsSelectionCriteria extends SelectionCriteria
 {
-    
+    /**
+     * @var array
+     */
+    public $ids;
+
+    /**
+     * @var array
+     */
+    public $adGroupIds;
+
+    /**
+     * @var array
+     */
+    public $campaignIds;
+
+    /**
+     * @var array
+     */
+    public $states;
+
+    /**
+     * @var array
+     */
+    public $statuses;
 }
