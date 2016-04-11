@@ -63,7 +63,6 @@ class YandexCampaignService extends YandexService
             'shop_id' => $shopId,
             'brand_id' => $brandId,
             'yandex_id' => $campaignId,
-            'negative_keywords' => Settings::getValue('negativeKeywords'),
             'title' => $name,
             'products_count' => 0
         ]);

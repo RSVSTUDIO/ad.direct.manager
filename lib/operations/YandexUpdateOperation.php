@@ -137,7 +137,9 @@ class YandexUpdateOperation extends BaseOperation
             'brand_id' => $context['brandIds']
         ];
 
-        $query = Product::find()->andWhere($criteria);
+        $query = Product::find()
+            ->andWhere($criteria)
+            ->andWhere("keywords <> ''");
 
         if (!empty($context['priceFrom'])) {
             $query->andWhere(['>=', 'price', $context['priceFrom']]);
@@ -170,20 +172,33 @@ class YandexUpdateOperation extends BaseOperation
                 //описание товара полученное через api
                 $apiProduct = $apiProducts[$product->product_id];
 
-                if (!$product->yandex_campaign_id) {
-                    $yaCampaign = $this->campaignService->getCampaign($this->shop->id, $apiProduct->getBrandId());
-                    if (!$yaCampaign) {
-                        $yaCampaign = $this->createCampaign($apiProduct);
-                    }
-                    $product->yandex_campaign_id = $yaCampaign->id;
-                    $product->save();
-                } else {
-                    $yaCampaign = $product->yandexCampaign;
-                }
+                $yaCampaign = $this->getOrCreateCampaign($product, $apiProduct);
 
-                $this->processProductUpdate($product, $apiProduct, $yaCampaign);
+                $this->processUpdate($product, $apiProduct, $yaCampaign);
             }
         }
+    }
+
+    /**
+     * @param Product $product
+     * @param ApiProduct $apiProduct
+     * @return YandexCampaign
+     * @throws YandexException
+     */
+    protected function getOrCreateCampaign(Product $product, ApiProduct $apiProduct)
+    {
+        if (!$product->yandex_campaign_id) {
+            $yaCampaign = $this->campaignService->getCampaign($this->shop->id, $apiProduct->getBrandId());
+            if (!$yaCampaign) {
+                $yaCampaign = $this->createCampaign($apiProduct);
+            }
+            $product->yandex_campaign_id = $yaCampaign->id;
+            $product->save();
+        } else {
+            $yaCampaign = $product->yandexCampaign;
+        }
+
+        return $yaCampaign;
     }
 
     /**
@@ -241,7 +256,7 @@ class YandexUpdateOperation extends BaseOperation
      * @param YandexCampaign $yaCampaign
      * @throws YandexException
      */
-    protected function processProductUpdate(Product $product, ApiProduct $apiProduct, YandexCampaign $yaCampaign)
+    protected function processUpdate(Product $product, ApiProduct $apiProduct, YandexCampaign $yaCampaign)
     {
         if (empty($product->yandex_ad_id) && $product->is_available) {
             $this->createAdProduct($product, $apiProduct, $yaCampaign);
