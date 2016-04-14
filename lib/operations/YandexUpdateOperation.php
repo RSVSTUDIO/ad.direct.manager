@@ -139,7 +139,7 @@ class YandexUpdateOperation extends BaseOperation
 
         $query = Product::find()
             ->andWhere($criteria)
-            ->andWhere('is_available != 0 AND yandex_ad_id != 0')
+            ->andWhere('(is_available + yandex_ad_id) != 0')
             ->andWhere("keywords != ''");
 
         if (!empty($context['priceFrom'])) {
