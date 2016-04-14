@@ -47,13 +47,16 @@ class AdService extends YandexService
         $data = [
             'TextAd' => [
                 'Href' => $apiProduct->href,
-               // 'AdImageHash' => $apiProduct->image,
                 'Mobile' => 'NO'
             ],
             'AdGroupId' => $product->yandex_adgroup_id
         ];
 
         $data['TextAd'] = array_merge($data['TextAd'], $textAdData);
+
+        if ($apiProduct->image) {
+            $data['TextAd']['AdImageHash'] = $apiProduct->image;
+        }
 
         $result = $this->adResource->add($data);
 
