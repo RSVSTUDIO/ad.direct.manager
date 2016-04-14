@@ -8,6 +8,7 @@
 
 namespace app\controllers\generator;
 
+use app\controllers\BaseController;
 use app\lib\api\shop\gateways\BrandsGateway;
 use app\controllers\SiteController;
 use app\models\Product;
@@ -16,7 +17,7 @@ use app\models\Shop;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class KeywordsController extends SiteController
+class KeywordsController extends BaseController
 {
     /**
      * @param int $shopId

@@ -10,7 +10,7 @@ namespace app\controllers;
 
 use app\models\LoginForm;
 
-class SecurityController extends SiteController
+class SecurityController extends BaseController
 {
     public $layout = 'simple';
 

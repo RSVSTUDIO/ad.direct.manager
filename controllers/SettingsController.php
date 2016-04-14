@@ -11,7 +11,7 @@ namespace app\controllers;
 use app\models\forms\SettingForm;
 use yii\helpers\Url;
 
-class SettingsController extends SiteController
+class SettingsController extends BaseController
 {
     public function actionIndex()
     {

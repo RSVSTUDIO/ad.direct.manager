@@ -2,6 +2,7 @@
 
 namespace app\controllers\generator;
 
+use app\controllers\BaseController;
 use app\controllers\SiteController;
 use Yii;
 use app\models\Template;
@@ -13,7 +14,7 @@ use yii\filters\VerbFilter;
 /**
  * TemplatesController implements the CRUD actions for Template model.
  */
-class TemplatesController extends SiteController
+class TemplatesController extends BaseController
 {
     public function behaviors()
     {

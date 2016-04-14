@@ -19,7 +19,7 @@ use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
-class GeneralController extends SiteController
+class GeneralController extends BaseController
 {
     public function actionIndex($shopId)
     {
