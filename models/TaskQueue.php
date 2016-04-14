@@ -75,7 +75,7 @@ class TaskQueue extends \yii\db\ActiveRecord
         return self::find()
             ->andWhere([
                 'shop_id' => $shopId,
-                'status' => [self::STATUS_READY, self::STATUS_RUN]
+                'status' => [self::STATUS_READY]
             ])->exists();
     }
 
