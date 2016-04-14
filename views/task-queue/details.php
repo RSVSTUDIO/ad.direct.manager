@@ -36,10 +36,12 @@ $this->params['breadcrumbs'][] = 'Подробно';
                 'attribute' => 'entity_id',
                 'value' => function (\app\models\YandexUpdateLog $model) {
                     if ($model->entity_type == YandexUpdateLog::ENTITY_PRODUCT) {
-                        return ArrayHelper::getValue($model->product, 'title');
+                        $value = ArrayHelper::getValue($model->product, 'title');
                     } else {
-                        return ArrayHelper::getValue($model->campaign, 'title');
+                        $value = ArrayHelper::getValue($model->campaign, 'title');
                     }
+
+                    return "$value (id - {$model->entity_id})";
                 }
             ],
             [
