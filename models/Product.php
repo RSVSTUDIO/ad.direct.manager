@@ -47,6 +47,8 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['shop_id', 'product_id'], 'required'],
             [['shop_id', 'product_id', 'brand_id'], 'integer'],
+            ['is_available', 'integer'],
+            ['is_available', 'default', 'value' => 0],
             [['keywords'], 'string'],
             [['title'], 'string'],
             [['seo_title'], 'string'],
