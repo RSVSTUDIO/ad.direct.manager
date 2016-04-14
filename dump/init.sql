@@ -85,7 +85,7 @@ CREATE TABLE `products` (
   `keywords` text NOT NULL,
   `price` float NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp,
   `is_available` tinyint(1) NOT NULL,
   `yandex_campaign_id` bigint(20) NOT NULL,
   `yandex_adgroup_id` bigint(20) NOT NULL,
