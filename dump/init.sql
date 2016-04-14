@@ -84,8 +84,8 @@ CREATE TABLE `products` (
   `seo_title` varchar(33) NOT NULL,
   `keywords` text NOT NULL,
   `price` float NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `is_available` tinyint(1) NOT NULL,
   `yandex_campaign_id` bigint(20) NOT NULL,
   `yandex_adgroup_id` bigint(20) NOT NULL,
@@ -93,17 +93,9 @@ CREATE TABLE `products` (
   PRIMARY KEY (`id`),
   KEY `FK_products_shops` (`shop_id`),
   CONSTRAINT `FK_products_shops` FOREIGN KEY (`shop_id`) REFERENCES `shops` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `products`
---
-
-LOCK TABLES `products` WRITE;
-/*!40000 ALTER TABLE `products` DISABLE KEYS */;
-/*!40000 ALTER TABLE `products` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `settings`
@@ -169,11 +161,11 @@ DROP TABLE IF EXISTS `task_queue`;
 CREATE TABLE `task_queue` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `shop_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `started_at` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `started_at` timestamp NULL DEFAULT NULL,
   `status` varchar(50) DEFAULT NULL,
   `operation` varchar(50) DEFAULT NULL,
-  `completed_at` datetime DEFAULT NULL,
+  `completed_at` timestamp NULL DEFAULT NULL,
   `context` text,
   `error` text,
   PRIMARY KEY (`id`),
@@ -320,7 +312,7 @@ CREATE TABLE `yandex_update_log` (
   `shop_id` int(11) NOT NULL,
   `entity_type` varchar(50) NOT NULL,
   `entity_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `operation` varchar(50) NOT NULL,
   `status` varchar(50) NOT NULL,
   `message` varchar(300) NOT NULL,
@@ -350,4 +342,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-04-14 19:31:08
+-- Dump completed on 2016-04-14 20:01:27
