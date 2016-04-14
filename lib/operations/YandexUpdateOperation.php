@@ -134,7 +134,9 @@ class YandexUpdateOperation extends BaseOperation
         $context = $this->task->getContext();
         $criteria = [
             'shop_id' => $context['shopId'],
-            'brand_id' => $context['brandIds']
+            'brand_id' => $context['brandIds'],
+            'is_available' => 0,
+            'yandex_ad_id' => 0
         ];
 
         $query = Product::find()
