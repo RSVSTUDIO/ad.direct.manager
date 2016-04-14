@@ -26,7 +26,7 @@ class AdResource extends AbstractResource
     {
         $ids = (array) $ids;
 
-        $result = $this->query(['SelectionCriteria' => ['Ids' => $ids]], 'archive');
+        $result = $this->query(['SelectionCriteria' => ['Ids' => $ids]], 'suspend');
 
         return new ChangeResult($result['result']['SuspendResults']);
     }
