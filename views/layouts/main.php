@@ -75,9 +75,9 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; Seo Admin <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Yandex.Direct admin <?= date('Y') ?></p>
 
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-right">Developed by qimus.</p>
     </div>
 </footer>
 
