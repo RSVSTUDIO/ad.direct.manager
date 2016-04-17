@@ -66,6 +66,7 @@ $form = ActiveForm::begin([
                         echo Html::hiddenInput("Products[{$model['id']}][title]", $model['title']);
                         echo Html::hiddenInput("Products[{$model['id']}][brand_id]", $model['brand']['id']);
                         echo Html::hiddenInput("Products[{$model['id']}][is_available]", $model['is_available']);
+                        echo Html::hiddenInput("Products[{$model['id']}][price]", $model['price']);
                         return Html::input('text', "Products[{$model['id']}][seo_title]", $model['seo_title'], ['class' => 'form-control']);
                     },
                     'format' => 'raw'
@@ -86,16 +87,18 @@ $form = ActiveForm::begin([
                             'format' => Editable::FORMAT_LINK,
                             'asPopover' => true,
                             'inputType' => Editable::INPUT_TEXT,
-                            'value' => $model['price'],
-                            'name' => "Products[{$model['id']}][price]",
+                            'value' => $model['manual_price'],
+                            'name' => "Products[{$model['id']}][manual_price]",
                             'pjaxContainerId' => 'keywords-container-pjax',
                             'ajaxSettings' => [
                                 'method' => 'post',
                                 'url' => \yii\helpers\Url::to(['/generator/keywords/stub'])
                             ],
-                            'afterInput' => function ($form) {
-                                echo Html::hiddenInput('field', 'price');
-                            }
+                            'displayValue' => $model['manual_price'] . ($model['price'] != $model['manual_price'] ? ' (manual)' : ''),
+                            'afterInput' => function ($form) use ($model) {
+                                echo Html::hiddenInput('field', 'manual_price');
+                                echo Html::hiddenInput("Products[{$model['id']}][price]", $model['price']);
+                            },
                         ]);
                     },
                     'format' => 'raw'

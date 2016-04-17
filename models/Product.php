@@ -4,6 +4,8 @@ namespace app\models;
 
 use app\lib\api\shop\models\ApiProduct;
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%products}}".
@@ -16,6 +18,7 @@ use Yii;
  * @property string $seo_title
  * @property string $keywords
  * @property float $price
+ * @property float $manual_price
  * @property bool $is_available
  * @property int $yandex_campaign_id
  * @property int $yandex_adgroup_id
@@ -30,7 +33,20 @@ class Product extends \yii\db\ActiveRecord
      * @var ApiProduct
      */
     protected $shopProduct;
-    
+
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'value' => new Expression('now()')
+            ]
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -52,7 +68,7 @@ class Product extends \yii\db\ActiveRecord
             [['keywords'], 'string'],
             [['title'], 'string'],
             [['seo_title'], 'string'],
-            ['price', 'number'],
+            [['price', 'manual_price'], 'number'],
             [['yandex_campaign_id', 'yandex_adgroup_id', 'yandex_ad_id'], 'integer']
         ];
     }
@@ -87,5 +103,15 @@ class Product extends \yii\db\ActiveRecord
     public function getYandexCampaign()
     {
         return $this->hasOne(YandexCampaign::className(), ['id' => 'yandex_campaign_id']);
+    }
+
+    /**
+     * Цена на товар установленна вручную
+     * 
+     * @return bool
+     */
+    public function isManualPrice()
+    {
+        return abs($this->price - $this->manual_price) < 0.0001;
     }
 }

@@ -24,16 +24,22 @@ class ProductsApiDataProvider extends ApiDataProvider
             if (isset($products[$item['id']])) {
                 $product = $products[$item['id']];
                 $productAdditional = [
-                    'price' => $product['price'],
                     'seo_title' => $product['seo_title'],
                     'keywords' => $product['keywords'],
+                    'manual_price' => $product['manual_price']
                 ];
             } else {
                 $productAdditional = [
                     'seo_title' => '',
-                    'keywords' => ''
+                    'keywords' => '',
+                    'manual_price' => null
                 ];
             }
+
+            if (empty($productAdditional['manual_price'])) {
+                $productAdditional['manual_price'] = $item['price'];
+            }
+
             $models[$i] = array_merge($models[$i], $productAdditional);
         }
 

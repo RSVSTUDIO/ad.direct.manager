@@ -49,8 +49,9 @@ class KeywordsController extends BaseController
         $this->response->format = Response::FORMAT_JSON;
         if ($this->request->post('hasEditable')) {
             $productInfo = $this->request->post('Products');
-            $field = $this->request->post('field');
-            return ['output' => current($productInfo)[$field]];
+            $productInfo = reset($productInfo);
+            $manualPrice = $productInfo['manual_price'];
+            return ['output' => $manualPrice . ($productInfo['price'] != $manualPrice ? ' (manual)' : '')];
         }
 
         return ['output' => ''];
@@ -76,6 +77,13 @@ class KeywordsController extends BaseController
 
         foreach ($productsData as $productId => $item) {
             $item['price'] = str_replace(',', '.', $item['price']);
+            $item['manual_price'] = str_replace(',', '.', $item['manual_price']);
+
+            //товары без ключевых слов или заголовка не сохраняем
+            if (empty($item['keywords']) || empty($item['seo_title']) || empty($item['is_available'])) {
+                continue;
+            }
+
             if (isset($products[$productId])) {
                 $product = $products[$productId];
                 $product->attributes = $item;

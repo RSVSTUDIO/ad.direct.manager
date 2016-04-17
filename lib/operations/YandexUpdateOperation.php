@@ -262,7 +262,7 @@ class YandexUpdateOperation extends BaseOperation
             $this->createAdProduct($product, $apiProduct, $yaCampaign);
         } elseif (!$apiProduct->isAvailable) {
             $this->removeAdProduct($product);
-        } elseif ($product->price != $apiProduct->price) {
+        } elseif (!$product->isManualPrice() && $product->price != $apiProduct->price) {
             $this->updateAdProduct($product, $apiProduct);
         }
 
