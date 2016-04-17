@@ -57,7 +57,11 @@ $form = ActiveForm::begin([
             'columns' => [
                 [
                     'label' => 'Название товара',
-                    'attribute' => 'title'
+                    'attribute' => 'title',
+                    'value' => function ($model) {
+                        return $model['title'] . ' ' . Html::a('(на сайте)', $model['href'], ['target' => '_blank']);
+                    },
+                    'format' => 'raw'
                 ],
                 [
                     'label' => 'Название для директа',
