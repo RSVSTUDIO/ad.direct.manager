@@ -141,15 +141,6 @@ CREATE TABLE `shops` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `shops`
---
-
-LOCK TABLES `shops` WRITE;
-/*!40000 ALTER TABLE `shops` DISABLE KEYS */;
-INSERT INTO `shops` VALUES (1,'Paramount','http://paramount-shop.dev/api/brands','http://paramount-shop.dev/api/products','secretPas$w0rd','ab69b628b4b54f99ae70e690cdea7934','7fe1ae7f993a45bd80b342b057e28303','df815cc852914128a32d73e892f5e3b4');
-/*!40000 ALTER TABLE `shops` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `task_queue`
